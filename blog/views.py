@@ -1,0 +1,205 @@
+from django.views.generic import ListView #this is for class based view
+from django.shortcuts import get_object_or_404, render
+from .models import Post #this fetch data from post class
+# creating post share view
+from django.conf import settings  #  access DEFAULT_FROM_EMAIL / mail backend
+from django.core.mail import send_mail
+from django.views.decorators.http import require_POST
+
+from django.contrib.postgres.search import TrigramSimilarity
+
+from .form import EmailPostForm, CommentForm, SearchForm # validate share-by-email inputs and  # needed for Post_detail
+from django.contrib.postgres.search import (SearchVector, 
+                                            SearchQuery,
+                                            SearchRank
+                                            )
+
+from django.db.models import Count
+
+def Post_detail(request, year, month, day, post): #here we have to pass the arguments here inorder to display the revered url.
+    post = get_object_or_404( #this help as to catch the error without using try and except method.
+        Post,
+        status = Post.Status.PUBLISHED, #return only published post
+        slug = post,
+        publish__year = year,
+        publish__month=month,
+        publish__day=day
+    )
+    
+    # then go to templates list.html
+    #list of active comments for this post
+    all_comments = post.comments.filter(active=True).order_by("-created") 
+    total_comments = all_comments.count()
+    try:
+        comment_limit = int(request.GET.get("climit", 3))
+    except (ValueError, TypeError):
+        comment_limit = 3
+    
+    #clamp to sane bounds
+    comment_limit = max(0, min(comment_limit, total_comments))
+    
+    comments = all_comments[:comment_limit]
+    has_more_comments = comment_limit < total_comments
+    next_comment_limit = min(comment_limit+5, total_comments)
+    # --- end comments ---
+    # form for users to comment
+    form = CommentForm()
+    
+    #list of similar posts
+    post_tag_ids = post.tags.values_list('id', flat = True)
+    similar_posts = (
+        Post.published
+        .filter(tags__in = post_tag_ids)
+        .exclude(id=post.id)
+        )
+    similar_posts = (
+        similar_posts
+        .annotate(same_tags = Count('tags'))
+        .order_by('-same_tags', '-publish')
+        )[:4]
+    
+    return render(
+        request, 
+        'blog/post/detail.html',
+        {
+            'post': post,
+            'comments': comments,
+            'toal_comments': total_comments,
+            'has_more_comments': has_more_comments,
+            'next_comment_limit': next_comment_limit,
+            'comment_limit': comment_limit,
+            'form': form,
+            'similar_posts':similar_posts
+        }
+    )
+from taggit.models import Tag
+def post_list(request, tag_slug = None):
+    post_list = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_list = post_list.filter(tags__in=[tag])
+        
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    #--pagination with 3 posts per page
+    paginator = Paginator(post_list, 4) #from all published item take only three items.
+    page_number = request.GET.get('page', 1)#  read ?page= from query string; default to page 1 if missing.
+    try:
+        page_obj = paginator.page(page_number)
+    except EmptyPage:
+        #If page_number is out of range get last page of result
+        page_obj=paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    
+    return render(
+        request,
+        'blog/post/list.html',
+        {'posts': post_list,
+         'page_obj': page_obj,
+         'tag': tag
+        }
+    )
+def kiya_view(request):
+    return render(
+        request, 
+        'blog/post/kiya.html'
+    )
+def home(request):
+    return render(
+        request, 
+        'blog/post/home.html'
+    )
+def post_share(request, post_id):
+    post = get_object_or_404(
+        Post,
+        id=post_id,
+        status=Post.Status.PUBLISHED
+    )
+    sent = False
+    if request.method == 'POST':
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post_url = request.build_absolute_uri(
+                post.get_absolute_url()
+            )
+            subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
+            message = (
+                f"Read {post.title} at {post_url}\n\n"
+                f"{cd['name']}'s comments: {cd['comments']}"
+            )
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[cd['to']],
+            )
+            sent = True
+    else:
+        form = EmailPostForm()
+    return render(
+        request,
+        'blog/post/share.html',
+        {
+            'post': post,
+            'form': form,
+            'sent': sent
+        }
+    )
+  #  ensure only POST requests are allowed
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(  #  fetch the post or return 404 if not found
+        Post,
+        id=post_id,
+        status=Post.Status.PUBLISHED
+    )
+    comment = None  #  initialize the comment variable
+    form = CommentForm(data=request.POST)  #  bind the form to the submitted data
+    if form.is_valid():  #  validate the form data
+        comment = form.save(commit=False)  #  create a comment object without saving
+        comment.post = post  #  associate the comment with the post
+        comment.save()  #  save the comment to the database
+    return render(  #  render the response with the post, form, and comment
+        request,
+        'blog/post/comment.html',
+        {
+            'post': post,
+            'form': form,
+            'comment': comment
+        }
+    )
+    
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            search_vector = SearchVector(
+                'title', weight = 'A'
+                ) + SearchVector(
+                    'body', weight = "B"
+                    )
+            search_query = SearchQuery(query)
+            results = (
+                Post.published.annotate(
+                    # search = search_vector,
+                    # rank = SearchRank(search_vector, search_query),
+                    similarity = TrigramSimilarity('title', query),
+                )
+                .filter(similarity__gt = 0.1)
+                .order_by('-similarity')
+            )
+    return render(
+        request,
+        'blog/post/search.html',
+        {
+            'form': form,
+            'query': query,
+            'results': results
+        }
+    )

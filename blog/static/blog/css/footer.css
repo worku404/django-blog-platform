@@ -1,0 +1,131 @@
+
+/* Footer */
+/* ...existing code... */
+
+/* Footer (modern, glassy, accessible) */
+.site-footer {
+  position: relative;
+  padding: 1.75rem 0 2.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.00) 55%
+  );
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 92, 255, 0.35),
+    rgba(45, 212, 191, 0.25),
+    rgba(255, 77, 141, 0.20),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+/* Social links group */
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Icon buttons */
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 999px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  background: transparent;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.footer-link svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: currentColor;
+}
+
+.footer-link:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.footer-link:active {
+  transform: translateY(0);
+}
+
+.footer-link:focus-visible {
+  outline: none;
+  color: var(--text);
+  border-color: rgba(124, 92, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.30);
+}
+
+/* Screen-reader only utility (for your <span class="sr-only">...) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Responsive tweak: keep footer tidy on small screens */
+@media (max-width: 520px) {
+  .footer-inner {
+    align-items: flex-start;
+  }
+
+  .footer-links {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .footer-link {
+    transition: none !important;
+  }
+}

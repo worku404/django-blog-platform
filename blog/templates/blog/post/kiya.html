@@ -1,0 +1,313 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+
+  <title>About — Gold (Software Engineer)</title>
+  <meta name="description" content="Gold — software engineering student focused on Django, backend/full-stack systems, clean architecture, and production-ready engineering." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="About — Gold (Software Engineer)" />
+  <meta property="og:description" content="Backend & full-stack developer focused on Django, relational databases, and maintainable production-oriented systems." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="{% static 'blog/images/gold-portrait.jpg' %}" />
+
+  <link rel="icon" href="{% static 'blog/images/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/kiya.css' %}" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="{% url 'blog:home' %}" aria-label="Go to homepage">
+        <span class="brand-mark" aria-hidden="true">G</span>
+        <span class="brand-text">Gold</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="{% url 'blog:post_list' %}">Posts</a>
+        <a href="#about">About</a>
+        <a href="#focus">Focus</a>
+        <a href="#latest-posts">Latest</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page" role="main">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="kicker">About</p>
+          <h1 id="page-title" class="hero-title">Gold</h1>
+          <p class="hero-subtitle">
+            Software engineering student focused on building robust, maintainable, production-oriented systems
+            across backend and full-stack web development.
+          </p>
+
+          <div class="hero-actions" role="group" aria-label="Primary actions">
+            <a class="btn" href="{% url 'blog:post_list' %}">View posts</a>
+            <a class="btn btn-ghost" href="#about">Read my approach</a>
+          </div>
+        </div>
+
+        <div class="hero-media" aria-label="Profile image">
+          <figure class="profile-figure">
+            <img
+              src="{% static 'blog/image/profile.jpg' %}"
+              alt="Portrait of Gold"
+              loading="lazy"
+              decoding="async"
+              width="640"
+              height="640"
+            />
+            <figcaption class="muted">Builder mindset • systems first • correctness over shortcuts</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="about-title">About</h2>
+          <p class="section-lead">
+            I design projects as cohesive systems, not isolated exercises—optimized for clarity, longevity, and real-world constraints.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <article class="card">
+            <div class="card-body prose">
+              <p>
+                My name is Gold, and I am a software engineering student with a strong focus on building robust, maintainable,
+                and production-oriented software systems. My primary technical interests lie in backend and full-stack web development,
+                with particular emphasis on Django and relational database–driven applications.
+              </p>
+
+              <p>
+                I approach software development with a foundation-first mindset, prioritizing clean architecture, correctness,
+                and long-term maintainability over quick or superficial implementations. Rather than treating projects as isolated
+                exercises, I design and develop them as cohesive systems, paying close attention to structure, data modeling, ORM usage,
+                scalability considerations, and deployment readiness.
+              </p>
+
+              <p>
+                I am currently developing a Django-based blog platform as a serious engineering project, using it to demonstrate disciplined
+                project organization, effective use of the Django ORM, and thoughtful UI and layout decisions. This project serves both as a
+                learning platform and as a portfolio artifact that reflects my commitment to professional software engineering practices.
+              </p>
+            </div>
+          </article>
+
+          <aside class="card">
+            <div class="card-body">
+              <figure class="media-figure">
+                <img
+                  src="{% static 'blog/image/gold-workspace.jpg' %}"
+                  alt="A focused development workspace"
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="800"
+                />
+                <figcaption class="muted">
+                  Working style: analytical, detail-oriented, and architecture-driven.
+                </figcaption>
+              </figure>
+
+              <div class="meta-list" aria-label="Quick highlights">
+                <div class="meta-item">
+                  <span class="meta-label">Primary</span>
+                  <span class="meta-value">Django • Backend • Full-stack</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Core themes</span>
+                  <span class="meta-value">Clean architecture • Data modeling • Maintainability</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Mindset</span>
+                  <span class="meta-value">Production readiness • Correctness • Scalability awareness</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="focus" aria-labelledby="focus-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="focus-title">Focus & learning</h2>
+          <p class="section-lead">
+            My priority is engineering fundamentals—then tooling—then speed.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="card-body">
+              <h3 class="card-title">Web & systems</h3>
+              <p class="muted">
+                I treat Django as a system: request lifecycle, ORM behavior, data correctness, performance trade-offs, and production constraints.
+              </p>
+              <div class="tag-row" aria-label="Systems focus tags">
+                <span class="tag">Django</span>
+                <span class="tag">ORM</span>
+                <span class="tag">Relational DB</span>
+                <span class="tag">Scalability</span>
+                <span class="tag">Deployment readiness</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-body">
+              <h3 class="card-title">Databases & ML foundations</h3>
+              <p class="muted">
+                In addition to web development, I am actively studying database systems and foundational machine learning concepts,
+                with practical exposure to tools such as scikit-learn.
+              </p>
+              <figure class="media-figure compact">
+                <img
+                  src="{% static 'blog/image/machine-learning-w-scikit-learn.png' %}"
+                  alt="Database-themed image representing data modeling and relational systems"
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="800"
+                />
+              </figure>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-body">
+              <h3 class="card-title">Tooling (used strategically)</h3>
+              <p class="muted">
+                I work with modern developer tooling, including large language models and agentic AI systems,
+                using them strategically to enhance productivity—while maintaining a strong emphasis on core engineering fundamentals.
+              </p>
+              <figure class="media-figure compact">
+                <img
+                  src="{% static 'blog/image/ml-summit-2025.png' %}"
+                  alt="Diagram-style image representing software architecture and system design"
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="800"
+                />
+              </figure>
+            </div>
+          </article>
+        </div>
+
+        <div class="card callout">
+          <div class="card-body prose">
+            <p>
+              I place high value on modern, industry-relevant learning resources and favor comprehensive, conceptually rigorous materials.
+              I regularly use professional platforms such as O’Reilly to deepen my technical understanding.
+            </p>
+            <p>
+              My working style is analytical and detail-oriented. I seek to understand underlying principles, trade-offs, and design rationale
+              rather than relying on rote solutions. I value precision, clarity, and critical thinking, and I continuously refine my approach
+              to engineering through structured learning and hands-on system building.
+            </p>
+            <p>
+              My objective is to grow into a highly competent software engineer capable of designing and delivering well-architected systems
+              that provide long-term value in professional environments.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="latest-posts" aria-labelledby="latest-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="latest-title">Latest posts</h2>
+
+          {% if tag_list %}
+            <div class="tag-cloud" aria-label="Browse by tag">
+              {% for tag in tag_list %}
+                <a class="tag" href="{% url 'tag_detail' tag.slug %}">#{{ tag.name }}</a>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if posts %}
+          <ul class="cards post-cards" role="list">
+            {% for post in posts %}
+              <li class="card post-card">
+                <article class="card-body">
+                  <header class="post-header">
+                    <h3 class="post-title">
+                      <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+                    </h3>
+
+                    <div class="post-meta">
+                      <time datetime="{{ post.published_at|date:'c' }}">
+                        {{ post.published_at|date:"M d, Y" }}
+                      </time>
+
+                      {% if post.read_time %}
+                        <span class="dot" aria-hidden="true">•</span><span>{{ post.read_time }} min read</span>
+                      {% endif %}
+
+                      {% if post.tags.all %}
+                        <span class="dot" aria-hidden="true">•</span>
+                        <span class="tags">
+                          {% for t in post.tags.all %}
+                            <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a>
+                          {% endfor %}
+                        </span>
+                      {% endif %}
+                    </div>
+                  </header>
+
+                  <p class="post-excerpt">
+                    {{ post.excerpt|default:post.body|truncatechars:180 }}
+                  </p>
+
+                  <footer class="post-footer">
+                    <a class="btn btn-small" href="{% url 'post_detail' post.slug %}">Read more</a>
+                  </footer>
+                </article>
+              </li>
+            {% endfor %}
+          </ul>
+
+          {% if is_paginated %}
+            <nav class="pagination" aria-label="Pagination">
+              {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+              {% endif %}
+
+              <span class="page-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+              {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="empty-state card">
+            <div class="card-body">
+              <p>No posts yet. Check back soon.</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+    {% include "blog/post/includes/footer.html" %}
+
+</body>
+</html>

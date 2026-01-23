@@ -1,0 +1,94 @@
+{% extends "blog/base.html" %}
+{% load blog_tags %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'blog/css/list.css' %}?v=20260121">
+{% endblock %}
+
+{% block content %}
+<section class="postlist">
+  <div class="postlist__container">
+    <header class="postlist__header">
+      <div class="postlist__titlewrap">
+        <h1 class="postlist__title">My Blog</h1>
+
+        {% if tag %}
+          <p class="postlist__subtitle">
+            Posts tagged
+            <span class="chip chip--accent">#{{ tag.name }}</span>
+          </p>
+      {% else %}
+        <p class="postlist__subtitle">
+          Latest writing, notes, and updates.
+        </p>
+      {% endif %}
+
+
+      </div>
+
+      <div class="postlist__toolbar" aria-label="Post tools">
+
+        {% if not tag %}
+          <p class="postlist__stats">
+            I've written <span class="postcount">{% total_posts %}</span> posts so far.
+          </p>
+        {% endif %}
+        <div class="postlist__actions">
+          <a class="btn btn--soft" href="{% url 'blog:post_list' %}">All posts</a>
+          <a class="btn btn--primary" href="{% url 'blog:home' %}">Home</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="postgrid" role="list">
+      {% for post in page_obj %}
+        <article class="postcard" role="listitem">
+          <div class="postcard__top">
+            <p class="postcard__meta">
+              <time datetime="{{ post.publish|date:'c' }}">{{ post.publish|date:"M d, Y" }}</time>
+              <span class="sep" aria-hidden="true">•</span>
+              <span class="author">{{ post.author }}</span>
+            </p>
+
+            {% if post.tags.all %}
+              <div class="tagrow" aria-label="Tags">
+                {% for t in post.tags.all %}
+                  <a class="chip" href="{% url 'blog:post_list_by_tag' t.slug %}">#{{ t.name }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <h2 class="postcard__title">
+            <a class="postcard__link" href="{{ post.get_absolute_url }}">
+              {{ post.title }}
+            </a>
+          </h2>
+
+          <div class="postcard__excerpt">
+            {{ post.body|markdown|truncatewords_html:30 }}
+          </div>
+
+          <div class="postcard__footer">
+            <a class="btn btn--ghost" href="{{ post.get_absolute_url  }}">
+              Read more
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      {% empty %}
+        <div class="empty">
+          <h2 class="empty__title">No posts yet</h2>
+          <p class="empty__text">When posts are published, they’ll show up here.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <nav class="pagination" aria-label="Pagination">
+      {% include 'blog/post/pagination.html' with page=page_obj %}
+    </nav>
+  </div>
+</section>
+<!-- Footer -->
+  {% include "blog/post/includes/footer.html" %}
+{% endblock %}

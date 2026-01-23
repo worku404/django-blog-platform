@@ -1,0 +1,23 @@
+{% extends "blog/base.html" %}{% load static %}
+{% load static%}
+{% block title %}Add Comment{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'blog/css/comment.css' %}?v=20260122">
+
+{% endblock %}
+
+{% block content %}
+  {% if comment %}
+    <section class="panel panel--card">
+      <div class="panel__head">
+        <h2 class="panel__title">Your comment has been added.</h2>
+        <p class="panel__sub">
+          <a class="link" href="{{ post.get_absolute_url }}">Back to the post</a>
+        </p>
+      </div>
+    </section>
+  {% else %}
+    {% include "blog/post/includes/comment_form.html" %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,145 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Worku Blog</title>
+    <meta
+      name="description"
+      content="Discover thoughtful posts, projects, and reflections on the FOODIE blog."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+<link rel="stylesheet" href="{% static 'blog/css/home.css' %}?v=20260121" />    {% comment %} <link href='{% static 'blog/css/blog.css' %}' rel='stylesheet'> {% endcomment %}
+  </head>
+
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+       <a class="brand" href="{% url 'blog:home' %}" aria-label="Go to homepage">
+        <span class="brand-mark" aria-hidden="true">G</span>
+        <span class="brand-text">Gold</span>
+         <span class="brand-sub">Blog</span>
+      </a>
+        <nav class="nav" aria-label="Primary">
+          <a class="nav-link" href="{% url 'blog:post_list' %}">Posts</a>
+          <a class="nav-link" href="{% url 'blog:kiya' %}">About</a>
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">New ideas • Real projects • Honest reflections</p>
+            <h1 class="hero-title">
+              A modern place to share
+              <span class="accent">thoughts</span>, build logs, and learnings.
+            </h1>
+            <p class="hero-lede">
+              Browse the latest posts, explore topics, and keep up with what’s being built.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="{% url 'blog:post_list' %}">
+                Explore posts
+              </a>
+              <a class="btn btn-ghost" href="{% url 'blog:kiya' %}">
+                Meet the author
+              </a>
+            </div>
+
+            <dl class="hero-stats" aria-label="Highlights">
+              <div class="stat">
+                <dt>Quality</dt>
+                <dd>Curated writing</dd>
+              </div>
+              <div class="stat">
+                <dt>Focus</dt>
+                <dd>Django & Web</dd>
+              </div>
+              <div class="stat">
+                <dt>Updates</dt>
+                <dd>Regular</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="hero-card" aria-label="Featured">
+            <div class="card-top">
+              <span class="pill">Featured</span>
+              <span class="pill pill-muted">Design • Engineering</span>
+            </div>
+
+            <h2 class="card-title">See what’s new on the blog</h2>
+            <p class="card-text">
+              Jump into the latest posts, or open the full archive to explore everything.
+            </p>
+
+            <div class="card-actions">
+              <a class="btn btn-secondary" href="{% url 'blog:post_list' %}">
+                View all posts
+              </a>
+              <a class="link" href="{% url 'admin:index' %}">Go to admin →</a>
+            </div>
+
+            <div class="card-meta" aria-hidden="true">
+              <div class="meta-row">
+                <span class="dot"></span><span class="meta-line"></span>
+              </div>
+              <div class="meta-row">
+                <span class="dot"></span><span class="meta-line meta-line-short"></span>
+              </div>
+              <div class="meta-row">
+                <span class="dot"></span><span class="meta-line"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-bg" aria-hidden="true"></div>
+      </section>
+
+      <section class="value">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-title">Built for readability</h2>
+            <p class="section-subtitle">
+              A clean layout, accessible typography, and a fast path to the content.
+            </p>
+          </div>
+
+          <div class="cards">
+            <article class="mini-card">
+              <h3>Quick navigation</h3>
+              <p>Jump straight into posts, learn about the author, or manage content.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Modern styling</h3>
+              <p>Subtle gradients, crisp spacing, and a responsive layout.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Accessible defaults</h3>
+              <p>Keyboard-friendly, good contrast, and sensible focus styles.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {% include "blog/post/includes/footer.html" %}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<form action="{% url 'blog:post_search' %}" method="get" class="sidebar-search" data-search-form>
+  <input
+    type="text"
+    name="query"
+    placeholder="Search posts..."
+    value="{{ request.GET.query|default:'' }}"
+    aria-label="Search posts"
+    data-search-input
+  />
+  <button type="submit" class="sidebar__pill sidebar__pill--soft search--btn">Search</button>
+
+  <p class="form-error" data-search-error style="margin: 6px 0 0; color: #ff4d4d; display: none;">
+    This field is required.
+  </p>
+</form>
+
+<script>
+  (function () {
+    const form = document.querySelector('[data-search-form]');
+    if (!form) return;
+
+    const input = form.querySelector('[data-search-input]');
+    const error = form.querySelector('[data-search-error]');
+
+    form.addEventListener('submit', function (e) {
+      const value = (input.value || '').trim();
+      if (!value) {
+        e.preventDefault();               // stay on the current page
+        if (error) error.style.display = 'block';
+        input.focus();
+      } else {
+        if (error) error.style.display = 'none';
+      }
+    });
+
+    input.addEventListener('input', function () {
+      if (error) error.style.display = 'none';
+    });
+  })();
+</script>
