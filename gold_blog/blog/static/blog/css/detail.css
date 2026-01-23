@@ -49,7 +49,7 @@ body{
   border-radius: calc(var(--radius) + 8px);
   box-shadow: var(--shadow);
   overflow: hidden;
-  margin-left: -10rem;
+  /* margin-left: -10rem; */
 }
 
 .post__header{
