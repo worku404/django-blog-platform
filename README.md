@@ -41,12 +41,29 @@ django-blog-project/
 
 ---
 
-## 🚀 Getting Started
+## 📚 Documentation
+
+**Comprehensive documentation is available in the [`docs/`](docs/) directory.**
+
+### Quick Links
+
+- **[Installation Guide](docs/installation.md)** - Detailed setup instructions
+- **[Usage Guide](docs/usage.md)** - How to create and manage posts
+- **[Admin Guide](docs/admin-usage.md)** - Using the Django admin interface
+- **[Architecture](docs/architecture.md)** - Technical architecture overview
+- **[Deployment](docs/deployment.md)** - Production deployment guide
+- **[Contributing](docs/contributing.md)** - How to contribute
+
+📖 **[View Complete Documentation Index](docs/README.md)**
+
+---
+
+## 🚀 Quick Start
 
 ### 1) Clone the repository
 ```bash
 git clone https://github.com/worku404/django-blog-project.git
-cd django-blog-project
+cd django-blog-project/gold_blog
 ```
 
 ### 2) Create and activate a virtual environment
@@ -63,12 +80,23 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4) Apply migrations
+### 4) Configure environment (create .env file)
+```bash
+# Create .env file with your database and email settings
+# See docs/configuration.md for details
+```
+
+### 5) Apply migrations
 ```bash
 python manage.py migrate
 ```
 
-### 5) Run the development server
+### 6) Create a superuser
+```bash
+python manage.py createsuperuser
+```
+
+### 7) Run the development server
 ```bash
 python manage.py runserver
 ```
@@ -76,26 +104,37 @@ python manage.py runserver
 Open your browser at:  
 **http://127.0.0.1:8000/**
 
----
-
-## 🧪 Optional: Create a Superuser (Admin Access)
-
-```bash
-python manage.py createsuperuser
-```
-
-Then visit:  
+Admin panel:  
 **http://127.0.0.1:8000/admin**
 
+For detailed setup instructions, see the **[Installation Guide](docs/installation.md)**
+
 ---
 
-## 📝 Customization
+## 📝 Features
 
-You can easily extend the project by:
-- Adding categories/tags
-- Implementing search or filters
-- Enhancing the UI with a CSS framework
-- Adding comments or user authentication
+- **Blog Post Management** - Create, edit, and publish posts with rich content
+- **Tagging System** - Organize posts with django-taggit tags
+- **Comments** - Reader engagement with moderation
+- **Search** - Full-text search powered by PostgreSQL
+- **Email Sharing** - Share posts via email
+- **RSS Feeds** - Subscribe to latest posts
+- **Responsive Design** - Mobile-friendly interface
+- **Admin Interface** - Comprehensive Django admin panel
+
+For a complete feature list, see **[Features Documentation](docs/features.md)**
+
+---
+
+## 🎨 Customization
+
+This blog is designed to be easily customizable. See the **[Customization Guide](docs/customization.md)** for details on:
+
+- Modifying styles and themes
+- Adding new features (categories, rich text editor, etc.)
+- Creating custom template tags
+- Extending the admin interface
+- Performance optimizations
 
 ---
 
@@ -110,21 +149,29 @@ You can easily extend the project by:
 
 ## 📄 License
 
-If you plan to open‑source this project, add a license file.  
-Example: [MIT License](https://opensource.org/licenses/MIT)
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙌 Contributing
 
-Contributions are welcome!  
-Feel free to fork the repo and submit a pull request.
+Contributions are welcome! Please read our **[Contributing Guidelines](docs/contributing.md)** before submitting pull requests.
+
+**How to contribute:**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+See the [Contributing Guide](docs/contributing.md) for detailed instructions.
 
 ---
 
-## 📫 Contact
+## 📫 Support
 
-If you have questions or suggestions, open an issue or reach out through GitHub.
+- **Issues**: [GitHub Issues](https://github.com/worku404/django-blog-project/issues)
+- **Documentation**: [docs/](docs/)
+- **Discussions**: [GitHub Discussions](https://github.com/worku404/django-blog-project/discussions)
 
 ---
 
