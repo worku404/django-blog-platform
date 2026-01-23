@@ -13,7 +13,12 @@ A clean, content‑focused blog built with **Django**. This project delivers a s
 ## ✅ Key Features
 
 - **Blog post publishing** with titles, content, and dates  
-- **Post listing & detail views** for easy browsing  
+- **Post listing & detail views** for easy browsing
+- **Tagging system** for categorizing posts
+- **Comment system** with moderation capabilities
+- **Email sharing** functionality
+- **Full-text search** with PostgreSQL trigram similarity
+- **RSS feeds** for content syndication
 - **Responsive layout** optimized for mobile and desktop  
 - **Clean UI** using lightweight HTML/CSS  
 - **Template‑driven pages** for SEO‑friendly rendering  
@@ -22,9 +27,11 @@ A clean, content‑focused blog built with **Django**. This project delivers a s
 
 ## 🧱 Tech Stack
 
-- **Backend:** Django (Python)  
+- **Backend:** Django 5.2 (Python)  
 - **Frontend:** HTML, CSS  
-- **Templates:** Django Template Engine  
+- **Database:** PostgreSQL (with full-text search support)
+- **Templates:** Django Template Engine
+- **Additional Libraries:** django-taggit, Markdown, psycopg  
 
 ---
 
@@ -89,6 +96,25 @@ Then visit:
 
 ---
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[Getting Started](docs/getting-started.md)** - Quick start guide for new users
+- **[Installation Guide](docs/installation.md)** - Detailed setup instructions
+- **[Project Structure](docs/project-structure.md)** - Architecture and organization
+- **[Features](docs/features.md)** - Complete feature documentation
+- **[Configuration](docs/configuration.md)** - Environment variables and settings
+- **[Development Guide](docs/development.md)** - Development workflow and testing
+- **[API Reference](docs/api-reference.md)** - Models, views, and URL patterns
+- **[Deployment Guide](docs/deployment.md)** - Production deployment instructions
+- **[Contributing](docs/contributing.md)** - Contribution guidelines
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+
+**Start here:** [Documentation Index](docs/index.md)
+
+---
+
 ## 📝 Customization
 
 You can easily extend the project by:
@@ -110,14 +136,20 @@ You can easily extend the project by:
 
 ## 📄 License
 
-If you plan to open‑source this project, add a license file.  
-Example: [MIT License](https://opensource.org/licenses/MIT)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙌 Contributing
 
-Contributions are welcome!  
+Contributions are welcome! Please read our [Contributing Guidelines](docs/contributing.md) for details on:
+
+- Code of conduct
+- Development setup
+- Coding standards
+- Pull request process
+- Issue guidelines
+
 Feel free to fork the repo and submit a pull request.
 
 ---
