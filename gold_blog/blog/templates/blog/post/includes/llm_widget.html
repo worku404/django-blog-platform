@@ -1,83 +1,71 @@
-<section>
-    <p style="
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-  ">
-        <span class="brand-mark" aria-hidden="true"
-        style="
-        width: 34px;
-        height: 34px;
-        display: grid;
-        place-items: center;
-        border-radius: 10px;
-        background: linear-gradient(135deg, rgba(124,58,237,0.90), rgba(34,197,94,0.65));
-        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);;
-        color: #fff;
-        font-weight: 800;
-     ">G</span>
-        <span class="brand-text"
-        style="
-        font-weight: 800;
-        letter-spacing: -0.03em;
-    ">Gold</span>
-         <span class="brand-sub"
-         style="
-        font-weight: 600;
-        color: rgba(255,255,255,.70);
-        letter-spacing: -0.02em;
-    ">AI</span>
-    </p>
-    <form id="llm-form">
-        {{ llm_form.prompt.label_tag }}
-        {{ llm_form.prompt }}
-        <button type="submit" class='llm--btn'>Generate</button>
-    </form>
-    <div id="response-container">
-        <h3>Generated Content:</h3>
-        <p id="generated-content"></p>
-    </div>
-</section>
+{# filepath: blog/post/includes/llm_widget.html #}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'blog/css/llm_widget.css' %}?v=20260121">
+{% endblock %}
+<aside class="sidebar-widget-llm">
+  <div class="llm-widget-title" style="margin-bottom: 1rem;">
+    <span class="brand-mark" aria-hidden="true">G</span>
+    <span class="brand-text">Gold</span>
+    <span class="brand-sub">AI</span>
+  </div>
+  <div id="history-container" class="llm-chat-history" style="max-width: 100%; min-height: 80px; margin-bottom: 1rem;"></div>
+  {% include "blog/post/includes/llm_chat_component.html" %}
+</aside>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const promptInput = document.getElementById('id_prompt');
-    const form = document.getElementById('llm-form');
-
-    // Submit on Enter (but allow Shift+Enter for newline)
-    promptInput.addEventListener('keydown', function(e) {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            form.dispatchEvent(new Event('submit', {cancelable: true, bubbles: true}));
-        }
+const history = [];
+function renderHistory() {
+    const container = document.getElementById('history-container');
+    container.innerHTML = '';
+    history.forEach(item => {
+        const entry = document.createElement('div');
+        entry.className = 'llm-chat-entry';
+        entry.innerHTML = `
+            <div class="llm-chat-user">You:</div>
+            <div class="llm-chat-user-msg">${item.prompt}</div>
+            <div class="llm-chat-ai">AI:</div>
+            <div class="llm-chat-ai-msg">${item.response}</div>
+        `;
+        container.appendChild(entry);
     });
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const prompt = promptInput.value;
-        const responseContainer = document.getElementById('generated-content');
-        responseContainer.textContent = "Generating...";
-
-        const response = await fetch("{% url 'blog:llm_generate' %}", {
-            method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({prompt: prompt})
-        });
-
-        const data = await response.json();
-        if (data.generated) {
-            responseContainer.innerHTML = data.generated;
-        } else {
-            responseContainer.innerHTML = data.error || "Something went wrong.";
-        }
-        // Clear the prompt input after submission
-        promptInput.value = "";
+    container.scrollTop = container.scrollHeight;
+}
+const form = document.getElementById('llm-form');
+const promptInput = document.getElementById('id_prompt');
+const sendBtn = form.querySelector('button[type="submit"]');
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const prompt = promptInput.value.trim();
+    if (!prompt) return;
+    sendBtn.disabled = true;
+    let aiResponse = "Generating...";
+    history.push({prompt: prompt, response: aiResponse});
+    renderHistory();
+    const response = await fetch("{% url 'blog:llm_generate' %}", {
+        method: "POST",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({prompt: prompt})
     });
+    const data = await response.json();
+    aiResponse = data.generated || data.error || "Something went wrong.";
+    history[history.length - 1].response = aiResponse;
+    renderHistory();
+    promptInput.value = "";
+    sendBtn.disabled = false;
+    promptInput.focus();
 });
+// Send on Enter (but allow Shift+Enter for newline)
+promptInput.addEventListener('keydown', function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.dispatchEvent(new Event('submit'));
+    }
+});
+{% comment %} const charCount = document.getElementById('char-count');
+promptInput.addEventListener('input', function() {
+    charCount.textContent = promptInput.value.length;
+}); {% endcomment %}
 </script>

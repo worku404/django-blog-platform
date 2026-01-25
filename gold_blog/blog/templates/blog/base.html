@@ -18,7 +18,7 @@
 <body>
     {% block sidebar %}
     <div class='sidebar llm--sidebar'>
-        <div class='sidebar__card'>
+        <div class='sidebar__card llm__sidebarcard'>
                 <a href="{% url 'blog:llm_page' %}">Chat with Gold AI →</a>
                 {% include "blog/post/includes/llm_widget.html" with form=llm_form %}
         </div>

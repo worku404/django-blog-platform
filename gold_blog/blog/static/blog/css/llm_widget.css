@@ -1,52 +1,49 @@
-/* Hide sidebar in full-page chat */
-.sidebar { display: none !important; }
-
-/* Back button */
-.llm-back-link {
-  position: fixed;
-  top: 2.2rem;
-  left: 2.2rem;
-  color: #fff;
-  background: #23232b;
-  padding: 0.5rem 1.2rem;
-  border-radius: 1.2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 2px 8px rgba(124, 92, 255, 0.10);
-  transition: background 0.2s, color 0.2s;
-  margin-left: 1rem;
-  z-index: 100;
+/* gold Ai icon */
+.brand-mark{
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.90), rgba(34,197,94,0.65));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    color: #fff;
+    font-weight: 800;
+    margin-right: 0.5em;
 }
-.llm-back-link:hover {
-  background: #7c5cff;
-  color: #fff;
+.brand-title{
+    font-weight: 800; 
+    letter-spacing: -0.03em;
+}
+.brand-sub{
+    font-weight: 600;
+    color: rgba(255,255,255,.70);
+    letter-spacing: -0.02em
 }
 
-/* Full-page chat container */
-.llm-chat-container {
+.sidebar-widget-llm {
+  width: 100%;
+  max-width: 430px;
+  margin: 0;
+  padding: 1.2em 0.5em 1.5em 0.5em;
+  padding-bottom: 0;
+  background: #000000;
+  border-radius: 1.2em;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  width: 100vw;
-  background: #000000;
-  padding-top: 4rem;
 }
 
-
-/* Chat title (full page) */
-.llm-chat-title {
+/* Widget title */
+.llm-widget-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #fff;
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2.5rem;
-  text-align: center;
-  letter-spacing: -0.01em;
+  margin-bottom: 1rem;
 }
-
-/* Chat history */
 .llm-chat-history {
   width: 100%;
   max-width: 1000px;
@@ -59,6 +56,13 @@
   overflow-y: auto;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
 }
+.sidebar-widget-llm .llm-chat-history {
+  max-width: 100%;
+  min-height: 80px;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+}
+
 /* Chat entry */
 .llm-chat-entry {
   margin-bottom: 1.5rem;
@@ -88,12 +92,11 @@
 .llm-chat-user-msg {
   color: #2dd4bf;
 }
-
-/* Chat input form */
 #llm-form {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
+
 
 /* --- Chat Input Component Styles --- */
 .ai-chat-input {

@@ -74,6 +74,7 @@ body{
 /* .sidebar{ align-self: start; } */
 .llm--sidebar{
   width: auto;
+  /* height: 100%; */
 }
 /* llm button */
 .llm--btn {
@@ -321,6 +322,10 @@ body{
 /* search btn */
 .search--btn{
   margin-top: 1rem;
+}
+.llm__sidebarcard{
+  height: auto;
+  padding: 0.5rem;
 }
 @media (max-width: 980px){
   body{

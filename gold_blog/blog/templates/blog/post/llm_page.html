@@ -10,14 +10,7 @@
 <p><a href="{% url 'blog:post_list' %}" class="llm-back-link">← Back</a></p>
   <div class="llm-chat-title">ሰላም ሰላም ሰዎች እንዴት ናችሁ🙋‍♂️🙋‍♂️ ምን ልታዘዝ ምን ይምጣ☺️</div>
   <div id="history-container" class="llm-chat-history"></div>
-  <form id="llm-form" autocomplete="off">
-    <div class="llm-chat-input-row">
-      {{ llm_form.prompt }}
-      <button type="submit" class="llm--btn llm-chat-send-btn" aria-label="Send">
-        <span class="llm--icon">➤</span>
-      </button>
-    </div>
-  </form>
+{% include "blog/post/includes/llm_chat_component.html" %}
 </div>
 <script>
 const history = [];
@@ -76,6 +69,11 @@ promptInput.addEventListener('keydown', function(e) {
         e.preventDefault();
         form.dispatchEvent(new Event('submit'));
     }
+});
+// Add after your existing JS in llm_page.html
+const charCount = document.getElementById('char-count');
+promptInput.addEventListener('input', function() {
+    charCount.textContent = promptInput.value.length;
 });
 </script>
 {% endblock %}
