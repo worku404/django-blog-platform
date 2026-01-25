@@ -8,7 +8,11 @@ from django.views.decorators.http import require_POST
 
 from django.contrib.postgres.search import TrigramSimilarity
 
-from .form import EmailPostForm, CommentForm, SearchForm # validate share-by-email inputs and  # needed for Post_detail
+from .form import (EmailPostForm, 
+                   CommentForm, 
+                   SearchForm,
+                   LLMForm
+                   ) # validate share-by-email inputs and  # needed for Post_detail
 from django.contrib.postgres.search import (SearchVector, 
                                             SearchQuery,
                                             SearchRank
@@ -43,8 +47,8 @@ def Post_detail(request, year, month, day, post): #here we have to pass the argu
     next_comment_limit = min(comment_limit+5, total_comments)
     # --- end comments ---
     # form for users to comment
-    form = CommentForm()
-    
+    comment_form = CommentForm()
+    llm_form = LLMForm()
     #list of similar posts
     post_tag_ids = post.tags.values_list('id', flat = True)
     similar_posts = (
@@ -68,12 +72,15 @@ def Post_detail(request, year, month, day, post): #here we have to pass the argu
             'has_more_comments': has_more_comments,
             'next_comment_limit': next_comment_limit,
             'comment_limit': comment_limit,
-            'form': form,
+            'llm_form': llm_form,
+            'comment_form': comment_form,
             'similar_posts':similar_posts
         }
     )
 from taggit.models import Tag
 def post_list(request, tag_slug = None):
+    
+    llm_form = LLMForm()
     post_list = Post.published.all()
     tag = None
     if tag_slug:
@@ -97,7 +104,8 @@ def post_list(request, tag_slug = None):
         'blog/post/list.html',
         {'posts': post_list,
          'page_obj': page_obj,
-         'tag': tag
+         'tag': tag,
+         'llm_form':llm_form
         }
     )
 def kiya_view(request):
@@ -111,6 +119,7 @@ def home(request):
         'blog/post/home.html'
     )
 def post_share(request, post_id):
+    llm_form = LLMForm()
     post = get_object_or_404(
         Post,
         id=post_id,
@@ -144,12 +153,14 @@ def post_share(request, post_id):
         {
             'post': post,
             'form': form,
-            'sent': sent
+            'sent': sent,
+            'llm_form':llm_form
         }
     )
   #  ensure only POST requests are allowed
 @require_POST
 def post_comment(request, post_id):
+    llm_form = LLMForm()
     post = get_object_or_404(  #  fetch the post or return 404 if not found
         Post,
         id=post_id,
@@ -167,7 +178,8 @@ def post_comment(request, post_id):
         {
             'post': post,
             'form': form,
-            'comment': comment
+            'comment': comment,
+            'llm_form': llm_form
         }
     )
     
@@ -203,3 +215,62 @@ def post_search(request):
             'results': results
         }
     )
+
+def llm_page(request):
+    llm_form = LLMForm(request.GET)
+    return render(
+        request,
+        'blog/post/llm_page.html',
+        {'llm_form': llm_form}
+    )
+
+import os
+from dotenv import load_dotenv
+import markdown
+
+# Correct path: up one, then into foodie
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'foodie', '.env')
+load_dotenv(dotenv_path=env_path)
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+def llm_generate(request):
+    if request.method == "POST":
+        prompt = request.POST.get("prompt") #text input
+        # List of API keys (fallback order)
+        api_keys = [
+            os.getenv("GEMINI_API_KEY_1"),
+            os.getenv("GEMINI_API_KEY_2"),
+            os.getenv("GEMINI_API_KEY_3"),
+            os.getenv("GEMINI_API_KEY_4"),
+        ]
+        url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent"
+        data = {
+            "contents": [
+                {
+                    "parts": [
+                        {"text": prompt}
+                    ]
+                }
+            ]
+        }
+        for api_key in api_keys:
+            if not api_key:
+                continue  # Skip if key is missing
+            headers = {
+                "Content-Type": "application/json",
+                "x-goog-api-key": api_key
+            }
+            try:
+                response = requests.post(url, headers=headers, json=data, timeout=15)
+                if response.status_code == 200:
+                    content = response.json()
+                    generated = content["candidates"][0]["content"]["parts"][0]["text"]
+                    #convert to Markdown to HTML
+                    generated_html = markdown.markdown(generated)
+                    return JsonResponse({"generated": generated_html})
+            except Exception as e:
+                continue  # Try next key if error occurs
+        return JsonResponse({"error": "All API keys failed or quota exceeded."}, status=500)
+    return JsonResponse({"error": "Invalid request."}, status=400)

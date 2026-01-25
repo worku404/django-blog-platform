@@ -1,0 +1,83 @@
+<section>
+    <p style="
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  ">
+        <span class="brand-mark" aria-hidden="true"
+        style="
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(124,58,237,0.90), rgba(34,197,94,0.65));
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);;
+        color: #fff;
+        font-weight: 800;
+     ">G</span>
+        <span class="brand-text"
+        style="
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    ">Gold</span>
+         <span class="brand-sub"
+         style="
+        font-weight: 600;
+        color: rgba(255,255,255,.70);
+        letter-spacing: -0.02em;
+    ">AI</span>
+    </p>
+    <form id="llm-form">
+        {{ llm_form.prompt.label_tag }}
+        {{ llm_form.prompt }}
+        <button type="submit" class='llm--btn'>Generate</button>
+    </form>
+    <div id="response-container">
+        <h3>Generated Content:</h3>
+        <p id="generated-content"></p>
+    </div>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const promptInput = document.getElementById('id_prompt');
+    const form = document.getElementById('llm-form');
+
+    // Submit on Enter (but allow Shift+Enter for newline)
+    promptInput.addEventListener('keydown', function(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit', {cancelable: true, bubbles: true}));
+        }
+    });
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const prompt = promptInput.value;
+        const responseContainer = document.getElementById('generated-content');
+        responseContainer.textContent = "Generating...";
+
+        const response = await fetch("{% url 'blog:llm_generate' %}", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({prompt: prompt})
+        });
+
+        const data = await response.json();
+        if (data.generated) {
+            responseContainer.innerHTML = data.generated;
+        } else {
+            responseContainer.innerHTML = data.error || "Something went wrong.";
+        }
+        // Clear the prompt input after submission
+        promptInput.value = "";
+    });
+});
+</script>

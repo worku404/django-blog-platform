@@ -50,4 +50,13 @@ urlpatterns = [
         views.post_search,
         name='post_search'
     ),
+    path(
+        'llm/',
+        views.llm_page,
+        name='llm_page'
+    ),
+    path('llm/generate/',
+         views.llm_generate,
+         name='llm_generate'
+         ), 
 ]

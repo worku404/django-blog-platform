@@ -25,3 +25,15 @@ class CommentForm(forms.ModelForm):
         
 class SearchForm(forms.Form):
     query = forms.CharField()
+
+class LLMForm(forms.Form):
+    prompt = forms.CharField(
+        label="",
+        widget=forms.Textarea(attrs={
+            'rows': 1,
+            'class': 'llm--textarea',
+            'placeholder': 'Ask anything',
+            'id': 'id_prompt',
+            'style': 'resize:none;overflow:hidden;'
+        })
+    )

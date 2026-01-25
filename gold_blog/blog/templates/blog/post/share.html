@@ -1,9 +1,5 @@
 {% extends "blog/base.html" %}
 {% load static %}
-{%block extra_head %}
-<link rel="stylesheet" href="{% static 'blog/css/blog.css' %}?v=20260122">
-<link rel="stylesheet" href="{% static 'blog/css/share.css' %}?v=20260122">
-{%endblock%}
 {% block title %}Share “{{ post.title }}”{% endblock %}
 
 {% block content %}

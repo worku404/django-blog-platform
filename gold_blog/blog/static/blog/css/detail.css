@@ -17,39 +17,12 @@
   --container: 1120px;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
-
-/* Page layout (base.html uses #content + #sidebar siblings) */
-body{
-  margin: 0;
-  font-family: var(--font);
-  color: var(--text);
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 1.25rem;
-  padding: 1.5rem 1.25rem 3rem;
-}
-
-#content{
-  width: min(100%, var(--container));
-  justify-self: end;
-  background-color: var(--bg);
-}
-@media (max-width: 980px){
-  body{
-    grid-template-columns: 1fr;
-    padding: 1.25rem 1rem 2.5rem;
-  }
-  #content{ justify-self: stretch; width: 100%; }
-  #sidebar{ position: static; }
-}
-
 /* Post */
 .post{
   border-radius: calc(var(--radius) + 8px);
   box-shadow: var(--shadow);
   overflow: hidden;
-  margin-left: -10rem;
+  /* margin-left: -10rem; */
 }
 
 .post__header{

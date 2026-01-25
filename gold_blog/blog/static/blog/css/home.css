@@ -126,7 +126,7 @@ a {
   place-items: center;
   border-radius: 10px;
   background: linear-gradient(135deg, rgba(124,58,237,0.90), rgba(34,197,94,0.65));
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow);
   color: #fff;
   font-weight: 800;
 }

@@ -16,6 +16,14 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    {% block sidebar %}
+    <div class='sidebar llm--sidebar'>
+        <div class='sidebar__card'>
+                <a href="{% url 'blog:llm_page' %}">Chat with Gold AI →</a>
+                {% include "blog/post/includes/llm_widget.html" with form=llm_form %}
+        </div>
+    </div>
+    {%endblock%}
     <div id='content'>
         {% block content %}{% endblock %}
     </div>
@@ -28,11 +36,11 @@
                     <p class="sidebar__subtitle">Writing, notes, and updates.</p>
                 </div>
             </div>
-            {% include "blog/post/includes/search_form.html" %}
+            {% include "blog/post/includes/search_form.html" with form=form %}
             <p>
-                <a href="{% url "blog:post_feed" %}">
+                {% comment %} <a href="{% url "blog:post_feed" %}">
                     Subscribe to my RSS feed
-                </a>
+                </a> {% endcomment %}
             </p>
             <section class="sidebar__section" aria-label="Latest posts">
             <div class="sidebar__sectionhead">

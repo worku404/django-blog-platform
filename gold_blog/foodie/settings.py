@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
+
+import dj_database_url  
 #Email server configuration
 
 EMAIL_HOST = 'smtp.gmail.com'             # Gmail SMTP endpoint
@@ -21,12 +23,6 @@ EMAIL_PORT = 587                          # STARTTLS port
 EMAIL_USE_SSL = False                     # don’t use implicit SSL (port 465)
 EMAIL_USE_TLS = True                      # upgrade connection to TLS after connect
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')  # sender address shown in emails
-
-DB_NAME = config("DB_NAME")
-DB_USER = config("DB_USER")          # no default
-DB_PASSWORD = config("DB_PASSWORD")  # no default
-DB_HOST = config("DB_HOST", default="127.0.0.1")
-DB_PORT = config("DB_PORT", default="5432")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,9 +36,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-h6qb&dp299+dgh^z9f5w_m8u#$wz567(*c7m%!0jpyg-2l7@l@'
 SECRET_KEY = config('SECRET_KEY')                     # set in Render env
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
 # ALLOWED_HOSTS = []
 
@@ -99,6 +95,12 @@ WSGI_APPLICATION = 'foodie.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DB_NAME = config("DB_NAME")
+DB_USER = config("DB_USER")          # no default
+DB_PASSWORD = config("DB_PASSWORD")  # no default
+DB_HOST = config("DB_HOST", default="127.0.0.1")
+DB_PORT = config("DB_PORT", default="5432")
+
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
@@ -124,7 +126,10 @@ DATABASES = {
     },
 }
 
-
+DATABASE_URL = config('DATABASE_URL', default=None)
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+    
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

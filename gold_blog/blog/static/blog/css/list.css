@@ -16,13 +16,15 @@
   --container: 1120px;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
+llm--container{
+  position: absolute;
+  top: -1000px;
+  left: 0;
+  background-color: green;
+}  
 
 .postlist{
   color: var(--text);
-  /* padding: 2.5rem 0 3.25rem; */
-  /* background-color: green; */
-  /* width: 100rem; */
-  /* margin-left: -11rem; */
 
 }
 
@@ -32,6 +34,7 @@
   font-family: var(--font);
   /* background-color: yellow; */
   margin-top: 0;
+  /* position: relative; */
 
 }
 
