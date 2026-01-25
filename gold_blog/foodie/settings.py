@@ -16,14 +16,20 @@ from decouple import config
 import dj_database_url  
 #Email server configuration
 
-EMAIL_HOST = 'smtp.gmail.com'             # Gmail SMTP endpoint
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')        # your Gmail/App Password user from env
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')# secret from env (never hard-code)
-EMAIL_PORT = 587                          # STARTTLS port
-EMAIL_USE_SSL = False                     # don’t use implicit SSL (port 465)
-EMAIL_USE_TLS = True                      # upgrade connection to TLS after connect
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')  # sender address shown in emails
+# EMAIL_HOST = 'smtp.gmail.com'             # Gmail SMTP endpoint
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')        # your Gmail/App Password user from env
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')# secret from env (never hard-code)
+# EMAIL_PORT = 587                          # STARTTLS port
+# EMAIL_USE_SSL = False                     # don’t use implicit SSL (port 465)
+# EMAIL_USE_TLS = True                      # upgrade connection to TLS after connect
+# DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')  # sender address shown in emails
 
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,12 +40,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-h6qb&dp299+dgh^z9f5w_m8u#$wz567(*c7m%!0jpyg-2l7@l@'
-SECRET_KEY = config('SECRET_KEY')                     # set in Render env
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-# DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+SECRET_KEY = config('SECRET_KEY')                     # set in Render env
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 # ALLOWED_HOSTS = []
 
 SITE_ID = 1
@@ -95,40 +101,42 @@ WSGI_APPLICATION = 'foodie.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DB_NAME = config("DB_NAME")
-DB_USER = config("DB_USER")          # no default
-DB_PASSWORD = config("DB_PASSWORD")  # no default
-DB_HOST = config("DB_HOST", default="127.0.0.1")
-DB_PORT = config("DB_PORT", default="5432")
+# DB_NAME = config("DB_NAME")
+# DB_USER = config("DB_USER")          # no default
+# DB_PASSWORD = config("DB_PASSWORD")  # no default
+# DB_HOST = config("DB_HOST", default="127.0.0.1")
+# DB_PORT = config("DB_PORT", default="5432")
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.postgresql",
+#         # 'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': config('DB_NAME'),
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         "NAME": DB_NAME,
+#         "USER": DB_USER,
+#         "PASSWORD": DB_PASSWORD,
+#         "HOST": DB_HOST,
+#         "PORT": DB_PORT,
+#         "OPTIONS": {
+#             'pool': {
+#                 'min_size': 2,
+#                 'max_size': 4,
+#                 'timeout': 10,
+#             }
+#         }
+#     },
+#     "old": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": str(Path(BASE_DIR) / "db.sqlite3"),  # <-- change to your old sqlite filename/path
+#     },
+# }
 
 DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config('DB_NAME'),
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        "NAME": DB_NAME,
-        "USER": DB_USER,
-        "PASSWORD": DB_PASSWORD,
-        "HOST": DB_HOST,
-        "PORT": DB_PORT,
-        "OPTIONS": {
-            'pool': {
-                'min_size': 2,
-                'max_size': 4,
-                'timeout': 10,
-            }
-        }
-    },
-    "old": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(Path(BASE_DIR) / "db.sqlite3"),  # <-- change to your old sqlite filename/path
-    },
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
-
-DATABASE_URL = config('DATABASE_URL', default=None)
-if DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+# if DATABASE_URL:
+#     DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
     
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
