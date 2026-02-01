@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 
 from django.contrib.postgres.search import TrigramSimilarity
-import redis
+# import redis
 
 from .form import (EmailPostForm, 
                    CommentForm, 
@@ -316,8 +316,8 @@ def post_like(request):
 
     return JsonResponse({'status': 'error'})
 
-r = redis.Redis(
-    host=settings.REDIS_HOST,
-    port=settings.REDIS_PORT,
-    db=settings.REDIS_DB
-)
+# r = redis.Redis(
+#     host=settings.REDIS_HOST,
+#     port=settings.REDIS_PORT,
+#     db=settings.REDIS_DB
+# )

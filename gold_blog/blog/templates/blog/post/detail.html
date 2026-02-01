@@ -11,9 +11,9 @@
 {% block content %}
 <article class="post">
   <header class="post__header">
-    <p class="post__kicker">Article </p><span class='total_views'>
+    {% comment %} <p class="post__kicker">Article </p><span class='total_views'>
               {{total_views}} view{{total_views|pluralize}}
-        </span></span>
+        </span></span> {% endcomment %}
 
     <h1 class="post__title">{{ post.title }}</h1>
 
