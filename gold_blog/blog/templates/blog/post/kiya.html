@@ -1,3 +1,4 @@
+<!-- filepath: c:\Users\hi\Downloads\webdev\DjangoWithPaulo\Gold_blog\gold_blog\blog\templates\blog\post\kiya.html -->
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -24,13 +25,19 @@
 
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <a class="brand" href="{% url 'blog:home' %}" aria-label="Go to homepage">
+
+      {# POSSIBLE 500 SOURCE: NoReverseMatch if blog:home missing #}
+      {# <a class="brand" href="{% url 'blog:home' %}" aria-label="Go to homepage"> #}
+      <a class="brand" href="/" aria-label="Go to homepage">
         <span class="brand-mark" aria-hidden="true">G</span>
         <span class="brand-text">Gold</span>
       </a>
 
       <nav class="nav" aria-label="Primary">
-        <a href="{% url 'blog:post_list' %}">Posts</a>
+        {# POSSIBLE 500 SOURCE: NoReverseMatch if blog:post_list missing #}
+        {# <a href="{% url 'blog:post_list' %}">Posts</a> #}
+        <a href="/post/">Posts</a>
+
         <a href="#about">About</a>
         <a href="#focus">Focus</a>
         <a href="#latest-posts">Latest</a>
@@ -50,7 +57,10 @@
           </p>
 
           <div class="hero-actions" role="group" aria-label="Primary actions">
-            <a class="btn" href="{% url 'blog:post_list' %}">View posts</a>
+            {# POSSIBLE 500 SOURCE: NoReverseMatch if blog:post_list missing #}
+            {# <a class="btn" href="{% url 'blog:post_list' %}">View posts</a> #}
+            <a class="btn" href="/post/">View posts</a>
+
             <a class="btn btn-ghost" href="#about">Read my approach</a>
           </div>
         </div>
@@ -59,7 +69,7 @@
           <figure class="profile-figure">
             <img
               src="{% static 'blog/image/profile.jpg' %}"
-              alt="Portrait of Gold"
+              alt="Portrait"
               loading="lazy"
               decoding="async"
               width="640"
@@ -232,7 +242,9 @@
         <div class="section-header">
           <h2 id="latest-title">Latest posts</h2>
 
-           {% comment %} {% if tag_list %}
+          {# Everything below already commented out in your file, keep as-is #}
+          {% comment %}
+          {% if tag_list %}
             <div class="tag-cloud" aria-label="Browse by tag">
               {% for tag in tag_list %}
                 <a href="{% url 'blog:post_detail' post.publish.year post.publish.month post.publish.day post.slug post.id %}">
@@ -241,77 +253,21 @@
               {% endfor %}
             </div>
           {% endif %}
-        </div> {% endcomment %}
+          {% endcomment %}
+        </div>
 
-        {% comment %} {% if posts %}
-          <ul class="cards post-cards" role="list">
-            {% for post in posts %}
-
-              <li class="card post-card">
-                <article class="card-body">
-                  <header class="post-header">
-                    <h3 class="post-title">
-                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-                    </h3>
-
-                    <div class="post-meta">
-                      <time datetime="{{ post.published_at|date:'c' }}">
-                        {{ post.published_at|date:"M d, Y" }}
-                      </time>
-
-                      {% if post.read_time %}
-                        <span class="dot" aria-hidden="true">•</span><span>{{ post.read_time }} min read</span>
-                      {% endif %}
-
-                      {% if post.tags.all %}
-                        <span class="dot" aria-hidden="true">•</span>
-                        <span class="tags">
-                          {% for t in post.tags.all %}
-                            <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a>
-                          {% endfor %}
-                        </span>
-                      {% endif %} 
-                    </div>
-                    {% endcomment %}
-                  {% comment %} </header> {% endcomment %}
-
-                  {% comment %} <p class="post-excerpt">
-                    {{ post.excerpt|default:post.body|truncatechars:180 }}
-                  </p> {% endcomment %}
-
-                  {% comment %} <footer class="post-footer"> {% endcomment %}
-                    {% comment %} <a class="btn btn-small" href="{% url 'post_detail' post.slug %}">Read more</a> {% endcomment %}
-                  {% comment %} </footer> {% endcomment %}
-                {% comment %} </article> {% endcomment %}
-              {% comment %} </li> {% endcomment %}
-            {% comment %} {% endfor %} {% endcomment %}
-          {% comment %} </ul> {% endcomment %}
-
-          {% comment %} {% if is_paginated %}
-            <nav class="pagination" aria-label="Pagination">
-              {% if page_obj.has_previous %}
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-              {% endif %}
-
-              <span class="page-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-
-              {% if page_obj.has_next %}
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-              {% endif %}
-            </nav>
-          {% endif %}
-        {% else %} {% endcomment %}
-          <div class="empty-state card">
-            <div class="card-body">
-              <p>No posts yet. Check back soon.</p>
-            </div>
+        <div class="empty-state card">
+          <div class="card-body">
+            <p>No posts yet. Check back soon.</p>
           </div>
-        {% comment %} {% endif %} {% endcomment %}
+        </div>
+
       </div>
     </section>
   </main>
 
-    {% include "blog/post/includes/footer.html" %}
+  {# POSSIBLE 500 SOURCE: TemplateDoesNotExist if footer file missing #}
+  {# {% include "blog/post/includes/footer.html" %} #}
 
 </body>
 </html>
