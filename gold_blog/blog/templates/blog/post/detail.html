@@ -132,10 +132,13 @@
       </div>
     {% endif %}
     {% else %}
+     {% endcomment %}
       <div class="empty">
         <h3 class="empty__title">No comments yet</h3>
-        <p class="empty__text">Be the first to leave a comment.</p>
+        {% comment %} <p class="empty__text">Be the first to leave a comment.</p> {% endcomment %}
+        <p class="empty__text">Comments are temporarily disabled due to storage limitations.</p>
       </div>
+       {% comment %}
     {% endif %} 
 
     <div class="formwrap">
