@@ -232,10 +232,12 @@
         <div class="section-header">
           <h2 id="latest-title">Latest posts</h2>
 
-          {% if tag_list %}
+           {% if tag_list %}
             <div class="tag-cloud" aria-label="Browse by tag">
               {% for tag in tag_list %}
-                <a class="tag" href="{% url 'tag_detail' tag.slug %}">#{{ tag.name }}</a>
+                <a href="{% url 'blog:post_detail' post.publish.year post.publish.month post.publish.day post.slug post.id %}">
+                  {{ post.title }}
+                </a>
               {% endfor %}
             </div>
           {% endif %}
@@ -248,7 +250,7 @@
                 <article class="card-body">
                   <header class="post-header">
                     <h3 class="post-title">
-                      <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
                     </h3>
 
                     <div class="post-meta">
@@ -264,7 +266,7 @@
                         <span class="dot" aria-hidden="true">•</span>
                         <span class="tags">
                           {% for t in post.tags.all %}
-                            <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a>
+                            {% comment %} <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a> {% endcomment %}
                           {% endfor %}
                         </span>
                       {% endif %}
@@ -276,7 +278,7 @@
                   </p>
 
                   <footer class="post-footer">
-                    <a class="btn btn-small" href="{% url 'post_detail' post.slug %}">Read more</a>
+                    {% comment %} <a class="btn btn-small" href="{% url 'post_detail' post.slug %}">Read more</a> {% endcomment %}
                   </footer>
                 </article>
               </li>
