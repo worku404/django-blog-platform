@@ -97,6 +97,7 @@
   {% endif %}
 
   <section class="panel" id="comments">
+  {% comment %}
     <div class="panel__head">
       <h2 class="panel__title">
         Comment{{comments.count|pluralize}}
@@ -135,11 +136,11 @@
         <h3 class="empty__title">No comments yet</h3>
         <p class="empty__text">Be the first to leave a comment.</p>
       </div>
-    {% endif %}
+    {% endif %} 
 
     <div class="formwrap">
       <h3 class="formwrap__title">Leave a comment</h3>
-        <form class="cform" action="{% url 'blog:post_comment' post.id %}" method="post" novalidate>
+        <form class="cform" action="{% url 'blog:post_comment' post.id %}" method="post" novalidate> 
               {% csrf_token %}
 
             <div class="cform__grid">
@@ -157,12 +158,14 @@
             </div>
             <div class="cform__actions">
                 <button class="btn-pill btn-teal" type="submit">Add comment</button>
-            </div>
+            </div> {% endcomment %}
             {% comment %} <div class="cform__actions">
                 <button class="btn btn--primary cform__submit" type="submit">Add comment</button>
-            </div> {% endcomment %}
+            </div>
         </form>
+         
     </div>
+    {% endcomment %}
   </section>
   <div class="post__footer">
     <a class="btn btn--soft" href="{% url 'blog:post_list' %}">← Back to posts</a>

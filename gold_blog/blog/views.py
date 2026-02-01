@@ -207,6 +207,7 @@ def post_comment(request, post_id):
 @login_required   
 def post_search(request):
     form = SearchForm()
+    llm_form = LLMForm()
     query = None
     results = []
     if 'query' in request.GET:
@@ -234,7 +235,8 @@ def post_search(request):
         {
             'form': form,
             'query': query,
-            'results': results
+            'results': results,
+            'llm_form': llm_form
         }
     )
 @login_required
