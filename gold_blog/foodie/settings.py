@@ -102,36 +102,43 @@ WSGI_APPLICATION = 'foodie.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DB_NAME = config("DB_NAME")
-DB_USER = config("DB_USER")          # no default
-DB_PASSWORD = config("DB_PASSWORD")  # no default
-DB_HOST = config("DB_HOST", default="127.0.0.1")
-DB_PORT = config("DB_PORT", default="5432")
+# DB_NAME = config("DB_NAME")
+# DB_USER = config("DB_USER")          # no default
+# DB_PASSWORD = config("DB_PASSWORD")  # no default
+# DB_HOST = config("DB_HOST", default="127.0.0.1")
+# DB_PORT = config("DB_PORT", default="5432")
+import dj_database_url
 
 DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config('DB_NAME'),
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        "NAME": DB_NAME,
-        "USER": DB_USER,
-        "PASSWORD": DB_PASSWORD,
-        "HOST": DB_HOST,
-        "PORT": DB_PORT,
-        "OPTIONS": {
-            'pool': {
-                'min_size': 2,
-                'max_size': 4,
-                'timeout': 10,
-            }
-        }
-    },
-    "old": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(Path(BASE_DIR) / "db.sqlite3"),  # <-- change to your old sqlite filename/path
-    },
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.postgresql",
+#         # 'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': config('DB_NAME'),
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         "NAME": DB_NAME,
+#         "USER": DB_USER,
+#         "PASSWORD": DB_PASSWORD,
+#         "HOST": DB_HOST,
+#         "PORT": DB_PORT,
+#         "OPTIONS": {
+#             'pool': {
+#                 'min_size': 2,
+#                 'max_size': 4,
+#                 'timeout': 10,
+#             }
+#         }
+#     },
+#     "old": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": str(Path(BASE_DIR) / "db.sqlite3"),  # <-- change to your old sqlite filename/path
+#     },
+# }
 
 DATABASE_URL = config('DATABASE_URL', default=None)
 if DATABASE_URL:
