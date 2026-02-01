@@ -1,7 +1,10 @@
-<ul>
+<ul class="sidebar__list">
     {% for post in latest_posts %}
-        <li>
-            <a href="{{ post.get_absolute_url }}">{{ post.title }} </a>
+        <li class="sidebar__item">
+            <a class="sidebar__link" href="{{ post.get_absolute_url }}">
+                <span class="sidebar__bullet" aria-hidden="true"></span>
+                <span class="sidebar__linktext">{{ post.title|truncatechars:30 }}</span>
+            </a>
         </li>
     {% endfor %}
 </ul>

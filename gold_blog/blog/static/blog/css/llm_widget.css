@@ -22,10 +22,11 @@
 }
 
 .sidebar-widget-llm {
-  width: 100%;
+  width: 100% !important;
+  height: inherit;
   max-width: 430px;
   margin: 0;
-  padding: 1.2em 0.5em 1.5em 0.5em;
+  padding: 0.2em;
   padding-bottom: 0;
   background: #000000;
   border-radius: 1.2em;
@@ -33,6 +34,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
 }
 
 /* Widget title */
@@ -45,22 +48,22 @@
   margin-bottom: 1rem;
 }
 .llm-chat-history {
-  width: 100%;
+  width: 97%;
   max-width: 1000px;
   min-height: 120px;
   max-height: 50vh;
-  background: #000000;
+  background: transparent;
   border-radius: 1.2rem;
   margin-bottom: 2rem;
   padding: 1.2rem 1.5rem;
   overflow-y: auto;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
 }
 .sidebar-widget-llm .llm-chat-history {
   max-width: 100%;
   min-height: 80px;
   margin-bottom: 1rem;
   padding: 0.8rem 1rem;
+  
 }
 
 /* Chat entry */

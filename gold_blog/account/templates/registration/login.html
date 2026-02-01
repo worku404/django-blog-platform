@@ -1,0 +1,69 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block title %}Log-in{% endblock  %}
+{% block content%}
+ 
+
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <h3>Login Here</h3>
+   <div class="top-nav">
+        <a href="{% url 'blog:home' %}" class="home-link">← Home</a>
+    </div>
+    <!-- Username Field -->
+    <label for="id_username">Username</label>
+    {{ form.username }}
+
+    <!-- Password Field -->
+    <label for="id_password">Password</label>
+    {{ form.password }}
+
+    <input type="hidden" name="next" value="{{ next }}">
+
+    <button type="submit">Log In</button>
+
+    <div class="extra-links">
+        <p><a href="{% url 'password_reset' %}">Forgotten password?</a></p>
+        <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+<!-- 
+    <div class="social">
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+            Sign in with Google
+        </a>
+    </div> -->
+            <!-- <div class="social">
+           <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="go"><i class="fab fa-google"></i>  Google</div></a>
+          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+        </div> -->
+
+        <div class="social">
+    <!-- Google Button -->
+    <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-btn google-btn">
+        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
+            <path fill="#EA4335" d="M24 9.5c3.14 0 5.97 1.2 8.15 3.15l6.1-6.1C34.15 3.15 29.4 1 24 1 14.64 1 6.9 6.48 3.45 14.02l7.27 5.64C12.3 14.1 17.7 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.5 24c0-1.5-.15-2.95-.45-4.35H24v8.3h12.7c-.55 2.95-2.15 5.45-4.55 7.15l7.27 5.64C43.65 37.5 46.5 31.2 46.5 24z"/>
+            <path fill="#FBBC05" d="M10.73 28.36c-.45-1.35-.7-2.8-.7-4.36s.25-3.01.7-4.36L3.45 14.02C1.8 17.2 1 20.5 1 24s.8 6.8 2.45 9.98l7.28-5.62z"/>
+            <path fill="#34A853" d="M24 47c6.4 0 11.8-2.1 15.7-5.7l-7.27-5.64c-2.05 1.4-4.7 2.25-8.43 2.25-6.3 0-11.7-4.6-13.57-10.85l-7.28 5.64C6.9 41.52 14.64 47 24 47z"/>
+            <path fill="none" d="M1 1h46v46H1z"/>
+        </svg>
+        Sign in with Google
+    </a>
+
+    <!-- Facebook Button -->
+    <a href="#" class="social-btn facebook-btn">
+        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
+            <path fill="#3b5998" d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.657-4.788 1.325 0 2.463.099 2.795.143v3.24h-1.917c-1.504 0-1.796.715-1.796 1.763v2.31h3.59l-.467 3.622h-3.123V24h6.116C23.407 24 24 23.407 24 22.676V1.325C24 .593 23.407 0 22.675 0z"/>
+        </svg>
+        Sign in with Facebook
+    </a>
+</div>
+</form>
+{% endblock %}

@@ -39,8 +39,11 @@ class Post(models.Model):
             models.Index(fields=['-publish']),
         ]
          
-    def __str__(self):
-        return self.title
+    users_like = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='posts_liked',
+        blank=True
+    )
     def get_absolute_url(self):
         return reverse(
             "blog:post_detail", 
@@ -48,10 +51,13 @@ class Post(models.Model):
                 self.publish.year,
                 self.publish.month,
                 self.publish.day,
-                self.slug
+                self.slug,
+                self.id
             ]
     )
     tags = TaggableManager()
+    def __str__(self):
+        return self.title
 #creating a model for comments.
 class Comment(models.Model):
     post = models.ForeignKey(
@@ -59,8 +65,15 @@ class Comment(models.Model):
         on_delete=models.CASCADE, 
         related_name='comments'  # Reverse access: post.comments.all() instead of post.comment_set.all()
     )
-    name = models.CharField(max_length=80)  # Commenter's name
-    email = models.EmailField()  # Commenter's email
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        null=True,
+        blank=True
+    )
+    # name = models.CharField(max_length=80)  # Commenter's name
+    # email = models.EmailField()  # Commenter's email
     body = models.TextField()  # Comment content
     created = models.DateTimeField(auto_now_add=True)  # Timestamp when created
     updated = models.DateTimeField(auto_now=True)  # Timestamp when last updated
@@ -72,6 +85,6 @@ class Comment(models.Model):
             models.Index(fields=['created']),  # Optimize queries by creation time
         ]
     def __str__(self):
-        return f'Commented by {self.name} on {self.post}'  # Human-readable label
+        return f'Commented by {self.user.username} on {self.post}'  # Human-readable label
     #makemigration
 #next go to admin.py and register the model

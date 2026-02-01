@@ -1,4 +1,6 @@
 from django import forms
+from .models import Comment
+
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25) #who is sharing 
     email = forms.EmailField()  #sender's email
@@ -8,7 +10,6 @@ class EmailPostForm(forms.Form):
         widget=forms.Textarea
     )
     
-from .models import Comment
 class CommentBoundField(forms.BoundField):  #  customize field rendering for CommentForm
     Comment_class = 'comment'  #  ensure all fields include this CSS class
 
@@ -21,7 +22,7 @@ class CommentForm(forms.ModelForm):
     bound_field_class = CommentBoundField
     class Meta:
         model = Comment
-        fields = ['name', 'email', 'body']
+        fields = ['body']
         
 class SearchForm(forms.Form):
     query = forms.CharField()
@@ -37,3 +38,4 @@ class LLMForm(forms.Form):
             'style': 'resize:none;overflow:hidden;'
         })
     )
+        

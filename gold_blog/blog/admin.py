@@ -12,7 +12,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'slug', 'author', 'publish', 'status'] #it create tabular format for title slug author ... from the post class
     list_filter =  ['status', 'created', 'publish'] #it creats the filter page to filter basen on the status created and other
     prepopulated_fields = {'slug': ('title',)} #  this automatically populate the slug based on the text written in the titel space
-    raw_id_fields = ['author']
+    # raw_id_fields = ['author']
     date_hierarchy = 'publish'  #this create navigation bar based on the published fiels
     ordering = ['status', 'publish'] #this is the order of the posts in admin list page status first then puplish secod
     search_fields = ['title', 'body'] #this will create search bar ontop of the page , this look for title and the body
@@ -24,6 +24,12 @@ class PostAdmin(admin.ModelAdmin):
 # this is for our comment section in admin page
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'post', 'created', 'active']
+    list_display = ['user_name', 'user_email', 'post', 'created', 'active']
     list_filter = ['active', 'created', 'updated']
-    search_fields = ['name', 'email', 'body']
+    search_fields = ['user__name', 'user__email', 'body']
+    def user_email(self, obj):
+        return obj.user.email
+    def user_name(self, obj):
+        full_name = obj.user.get_full_name()
+        return  full_name if full_name else obj.user.username
+    user_email.short_description = 'User Email'

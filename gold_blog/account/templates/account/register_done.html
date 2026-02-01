@@ -1,0 +1,17 @@
+{% extends "account/base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
+<div class="glass-card success-card">
+    <h3>Welcome, {{ new_user.username }}!</h3>
+    <p>Your account has been successfully created.</p>
+    <a class="primary-btn" href="{% url 'login' %}">Log in</a>
+</div>
+{% endblock %}
+

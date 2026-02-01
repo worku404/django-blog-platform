@@ -17,6 +17,7 @@
   --container: 1120px;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
+
 /* Post */
 .post{
   border-radius: calc(var(--radius) + 8px);
@@ -104,11 +105,7 @@
   border-color: rgba(255,255,255,.20);
 }
 
-.btn--share{
-  padding: 1rem;
-  width: 8rem;
-  margin-right: 1rem;
-}
+
 
 .similar__card{
   grid-column: span 6;
@@ -346,6 +343,25 @@
 
 /* Buttons */
 
+.btn--primary{
+  color: #061018;
+  background: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
+  box-shadow: 0 14px 30px rgba(124,92,255,.18);
+}
+
+/* Footer actions */
+.post__footer{
+  display:flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  padding: 1.1rem 1.6rem 1.4rem;
+  border-top: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.02);
+}
+.btn--share{
+  width: 10rem;
+  margin-right: 1rem;
+}
 .btn--share{
   border-radius: 0.65rem;
   margin-bottom: 1rem;
@@ -368,21 +384,78 @@
   background-color: none;
 }
 
-.btn--primary{
-  color: #061018;
-  background: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
-  box-shadow: 0 14px 30px rgba(124,92,255,.18);
+.share{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+/* From Uiverse.io by vinodjangid07 */ 
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 1rem;
+  border: hidden;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
+  cursor: pointer;
+  background-color: transparent;
+  width: 140px;
+  height: 40px;
+  margin-right: 1rem;
 }
 
-/* Footer actions */
-.post__footer{
-  display:flex;
-  gap: .6rem;
-  flex-wrap: wrap;
-  padding: 1.1rem 1.6rem 1.4rem;
-  border-top: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.02);
+.leftContainer {
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
+
+.leftContainer .like {
+  color: white;
+  font-weight: 600;
+}
+.likeCount {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
+  font-weight: 600;
+  position: relative;
+  background-color: white;
+}
+
+.likeCount::before {
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  content: "";
+  background-color: rgb(255, 255, 255);
+  transform: rotate(45deg);
+  left: -4px;
+}
+
+.Btn:hover .leftContainer {
+  background-color: rgb(219, 0, 0);
+}
+
+.Btn:active .leftContainer {
+  background-color: rgb(201, 0, 0);
+}
+
+.Btn:active .leftContainer svg {
+  transform: scale(1.15);
+  transform-origin: top;
+}
+
 
 @media (prefers-reduced-motion: reduce){
   *{ transition: none !important; }

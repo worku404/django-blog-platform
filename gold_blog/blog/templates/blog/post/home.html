@@ -31,7 +31,7 @@
          <span class="brand-sub">Blog</span>
       </a>
         <nav class="nav" aria-label="Primary">
-          <a class="nav-link" href="{% url 'blog:post_list' %}">Posts</a>
+          <a class="nav-link" href="{% url 'login' %}">Log in</a>
           <a class="nav-link" href="{% url 'blog:kiya' %}">About</a>
           <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
         </nav>
@@ -52,8 +52,8 @@
             </p>
 
             <div class="hero-actions">
-              <a class="btn btn-primary" href="{% url 'blog:post_list' %}">
-                Explore posts
+              <a class="btn btn-primary" href="{% url 'register' %}">
+                Get started
               </a>
               <a class="btn btn-ghost" href="{% url 'blog:kiya' %}">
                 Meet the author
@@ -88,7 +88,7 @@
             </p>
 
             <div class="card-actions">
-              <a class="btn btn-secondary" href="{% url 'blog:post_list' %}">
+              <a class="btn btn-secondary" href="{% url 'login' %}">
                 View all posts
               </a>
               <a class="link" href="{% url 'admin:index' %}">Go to admin →</a>

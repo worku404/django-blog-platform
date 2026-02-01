@@ -1,6 +1,5 @@
-from django.urls import path
-from . import  views
- 
+from django.urls import path, include
+from . import  views 
 from .feeds import LatestPostsFeed
 app_name = 'blog'
 urlpatterns = [
@@ -20,12 +19,12 @@ urlpatterns = [
         name='post_list_by_tag'
     ),
     path(
-        'post/<int:year>/<int:month>/<int:day>/<slug:post>/',
+        'post/<int:year>/<int:month>/<int:day>/<slug:slug>/<int:post_id>',
         views.Post_detail, 
         name='post_detail'
     ),
     path(
-        'kiya/',
+        'author/',
         views.kiya_view,
         name='kiya'
     ),
@@ -58,5 +57,6 @@ urlpatterns = [
     path('llm/generate/',
          views.llm_generate,
          name='llm_generate'
-         ), 
+         ),
+    path('like/', views.post_like, name='like'),
 ]

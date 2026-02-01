@@ -1,0 +1,355 @@
+*,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #080710;
+}
+.background{
+    width: 430px;
+    height: 520px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+}
+.background .shape{
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
+}
+.shape:first-child{
+    background: linear-gradient(#1845ad,#23a2f6);
+    left: -80px;
+    top: -80px;
+}
+.shape:last-child{
+    background: linear-gradient(to right,#ff512f,#f09819);
+    right: -30px;
+    bottom: -80px;
+}
+form{
+    height: 520px;
+    width: 400px;
+    background-color: rgba(255,255,255,0.13);
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
+}
+form *{
+    font-family: 'Poppins',sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+form h3{
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+}
+label{
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+input{
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.07);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
+}
+button{
+    margin-top: 40px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.social{
+  margin-top: 30px;
+  text-align: center;
+}
+.social a{
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 3px;
+  background-color: rgba(255,255,255,0.27);
+  color: #eaf0fb;
+  text-decoration: none;
+}
+.social a:hover{
+  background-color: rgba(255,255,255,0.47);
+}
+.extra-links{
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+.extra-links a{
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+
+
+/* regitration *
+/
+
+/* Make register form slightly taller for extra fields */
+form {
+    height: auto;
+    min-height: 600px;
+}
+
+/* Improve spacing for multi-field forms */
+form label {
+    margin-top: 20px;
+}
+
+/* Style Django help texts */
+.helptext {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+    color: #cfd8ff;
+}
+
+/* Style Django validation errors */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 13px;
+    color: #ff6b6b;
+}
+
+/* Tweak button spacing for longer forms */
+form button {
+    margin-top: 30px;
+}
+/* registration done  */
+
+/* Generic glass card container (reusable) */
+.glass-card{
+    width: 400px;
+    padding: 50px 35px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.13);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+/* Success page specific spacing */
+.success-card h3{
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.success-card p{
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: #e0e0e0;
+}
+
+/* Primary action button styled like login button */
+.primary-btn{
+    display: inline-block;
+    width: 100%;
+    padding: 15px 0;
+    background-color: #ffffff;
+    color: #080710;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
+
+.primary-btn:hover{
+    opacity: 0.9;
+}
+
+/* logout */
+
+.status-card h3{
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+.status-card p{
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: #e0e0e0;
+}
+
+/* home button */
+.top-nav{
+    position: absolute;
+    top: 20px;
+    left: 25px;
+}
+
+.home-link{
+    font-size: 14px;
+    text-decoration: none;
+    color: #cfd8ff;
+    transition: 0.2s ease;
+}
+
+.home-link:hover{
+    color: #ffffff;
+    text-decoration: underline;
+}
+/* effect */
+a {
+    transition: all 0.2s ease-in-out;
+    text-decoration: none; /* Ensure no underline by default */
+}
+
+a:hover {
+    color: #ffffff;
+    text-decoration: none; /* Remove underline on hover */
+}
+input:hover{
+    background-color: rgba(255,255,255,0.12);
+}
+
+input:focus{
+    background-color: rgba(255,255,255,0.18);
+    box-shadow: 0 0 0 2px rgba(35,162,246,0.6);
+}
+
+/* Social login container */
+.social {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Social button styles */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+/* Google button */
+.google-btn {
+    background-color: #db4437;
+    text-decoration: none;
+}
+
+.google-btn:hover {
+    background-color: #c23321;
+}
+
+/* Facebook button */
+.facebook-btn {
+    background-color: #3b5998;
+    text-decoration: none;
+
+}
+
+.facebook-btn:hover {
+    background-color: #2d4373;
+}
+
+/* Social icons */
+.social-icon {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+/* Message container */
+.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+/* Individual message */
+.message {
+    position: relative;
+    padding: 14px 40px 14px 16px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Error style example */
+.message.error {
+    background-color: rgba(255, 80, 80, 0.15);
+    border: 1px solid rgba(255, 80, 80, 0.4);
+    color: #ffb3b3;
+}
+
+/* Close button (top-right corner) */
+.close-btn {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: none;
+    border: none;
+    margin-right: 5px;
+    color: rgba(255, 80, 80, 0.4);
+    border-radius: 999px;
+    width: 30px;
+    height: 3px;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* Optional entrance animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -17,8 +17,8 @@
 </head>
 <body>
     {% block sidebar %}
-    <div class='sidebar llm--sidebar'>
-        <div class='sidebar__card llm__sidebarcard'>
+    <div class='llm--sidebar '>
+        <div class='llm__sidebarcard sidebar__card' style="margin-bottom: 0.5rem;">
                 <a href="{% url 'blog:llm_page' %}">Chat with Gold AI →</a>
                 {% include "blog/post/includes/llm_widget.html" with form=llm_form %}
         </div>
@@ -28,7 +28,15 @@
         {% block content %}{% endblock %}
     </div>
     <div id='sidebar' class="sidebar">
-        <div class="sidebar__card">
+        <div class="top-controls">
+        <button id="toggleBtn" onclick="myFunction()" class="action-btn toggle-btn">Hide</button>
+        
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="action-btn logout-btn">Log out</button>
+        </form>
+        </div>
+        <div id="hide" class="sidebar__card">
             <div class="sidebar__brand">
                 <div class="sidebar__mark" aria-hidden="true"></div>
                 <div>
@@ -60,17 +68,42 @@
                     <li class="sidebar__item">
                         <a class="sidebar__link" href="{{ post.get_absolute_url }}">
                             <span class="sidebar__bullet" aria-hidden="true"></span>
-                            <span class="sidebar__linktext">{{ post.title }}</span>
+                            <span class="sidebar__linktext">{{ post.title|truncatechars:30 }}</span>
                         </a>
                     </li>
                 {% endfor %}
             </ul>
             </section>
             <div class="sidebar__footer">
-                <a class="sidebar__pill" href="{% url 'blog:post_list' %}">Browse posts</a>
-                <a class="sidebar__pill sidebar__pill--soft" href="{% url 'blog:home' %}">Home</a>
+                <a class="btn-pill btn-purple" href="{% url 'blog:post_list' %}">Browse posts</a>
+                <a class="btn-pill btn-dark" href="{% url 'blog:home' %}">Home</a>
             </div>
         </div>
     </div>
+    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // DOM loaded
+            {% block domready %}
+            {% endblock %}
+        })
+    </script>
 </body>
 </html>
+<script>
+function myFunction() {
+  var x = document.getElementById("hide");
+  var btn = document.getElementById("toggleBtn");
+  var content = document.getElementById("content");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    btn.textContent = "Hide";
+    content.classList.remove("sidebar-hidden");
+  } else {
+    x.style.display = "none";
+    btn.textContent = "Unhide";
+    content.classList.add("sidebar-hidden");
+  }
+}
+</script>

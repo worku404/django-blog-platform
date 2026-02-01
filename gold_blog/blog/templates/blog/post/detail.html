@@ -11,13 +11,15 @@
 {% block content %}
 <article class="post">
   <header class="post__header">
-    <p class="post__kicker">Article</p>
+    <p class="post__kicker">Article </p><span class='total_views'>
+              {{total_views}} view{{total_views|pluralize}}
+        </span></span>
 
     <h1 class="post__title">{{ post.title }}</h1>
 
     <div class="post__meta">
       <span class="meta__item">
-        <span class="meta__label">Published</span>
+        <span class="meta__label">Published
         <time datetime="{{ post.publish|date:'c' }}">{{ post.publish|date:"M d, Y" }}</time>
       </span>
 
@@ -26,6 +28,7 @@
       <span class="meta__item">
         <span class="meta__label">Author</span>
         <span>{{ post.author }}</span>
+        
       </span>
     </div>
     {% if post.tags.all %}
@@ -41,7 +44,35 @@
    {{ post.body|markdown}}
   </section>
    <div class="share">
-        <a class="btn btn--share btn--primary" href="{% url 'blog:post_share' post.id %}" >Share</a>
+        <a href="{% url 'blog:post_share' post.id %}" class="share-btn">
+        <svg class="share-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span>Share</span>
+      </a>
+      {% with total_likes=post.users_like.count likers=post.users_like.all %}
+          <div class='like-container'>
+            <span class='count'>
+              <span class='total'>{{ total_likes }}</span>
+            </span>
+            <button
+              type="button"
+              data-id="{{ post.id }}"
+              data-action="{% if request.user in likers %}unlike{% else %}like{% endif %}"
+              class='like like-btn'
+            >
+              {% if request.user in likers %}
+                unlike
+              {% else %}
+                like
+              {% endif %}
+            </button>
+          </div>
+        {% endwith %}
     </div>
   {% if similar_posts %}
     <section class="panel">
@@ -57,7 +88,7 @@
               <span class="pill">Recommended</span>
               <span class="pill pill--muted">{{ p.publish|date:"M d, Y" }}</span>
             </div>
-            <h3 class="similar__title">{{ p.title }}</h3>
+            <h3 class="similar__title">{{ p.title|truncatechars:50 }}</h3>
             <p class="similar__hint">Open →</p>
           </a>
         {% endfor %}
@@ -79,8 +110,9 @@
         {% for c in comments %}
           <li class="comment">
             <div class="comment__top">
-              <p class="comment__author">{{ c.name }}</p>
+              <p></p>
               <time class="comment__time" datetime="{{ c.created|date:'c' }}">
+              <span class="comment__author">@{{ request.user }}</span>
                 {{ c.created|date:"M d, Y • H:i" }}
               </time>
             </div>
@@ -123,10 +155,12 @@
             <div class="cform__field cform__field--full">
               {{ comment_form.body.as_field_group }}
             </div>
-
             <div class="cform__actions">
-                <button class="btn btn--primary cform__submit" type="submit">Add comment</button>
+                <button class="btn-pill btn-teal" type="submit">Add comment</button>
             </div>
+            {% comment %} <div class="cform__actions">
+                <button class="btn btn--primary cform__submit" type="submit">Add comment</button>
+            </div> {% endcomment %}
         </form>
     </div>
   </section>
@@ -137,4 +171,35 @@
 </article>
 <!-- Footer -->
   {% include "blog/post/includes/footer.html" %}
+{% endblock %}
+{% block domready %}
+  const url = '{% url 'blog:like' %}';
+  var options ={
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+document.querySelector('button.like')
+  .addEventListener('click', function(e) {
+    e.preventDefault();
+    var likeButton = this;
+    var formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+    options['body'] = formData;
+    fetch(url, options)
+      .then(response => response.json())
+      .then(data => {
+        if (data['status'] === 'ok') {
+          // Toggle action
+          var previousAction = likeButton.dataset.action;
+          var action = previousAction === 'like' ? 'unlike' : 'like';
+          likeButton.dataset.action = action;
+          likeButton.innerHTML = action === 'like' ? 'like' : 'unlike';
+          // Always use the count from the server!
+          var likeCount = document.querySelector('span.total');
+          likeCount.innerHTML = data['total_likes'];
+        }
+      });
+  });
 {% endblock %}

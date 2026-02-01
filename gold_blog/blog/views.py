@@ -7,11 +7,13 @@ from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 
 from django.contrib.postgres.search import TrigramSimilarity
+import redis
 
 from .form import (EmailPostForm, 
                    CommentForm, 
                    SearchForm,
-                   LLMForm
+                   LLMForm,
+                #    LoginForm
                    ) # validate share-by-email inputs and  # needed for Post_detail
 from django.contrib.postgres.search import (SearchVector, 
                                             SearchQuery,
@@ -19,15 +21,29 @@ from django.contrib.postgres.search import (SearchVector,
                                             )
 
 from django.db.models import Count
+from taggit.models import Tag
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def Post_detail(request, year, month, day, post): #here we have to pass the arguments here inorder to display the revered url.
+import requests
+from django.http import JsonResponse,HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
+import os
+from dotenv import load_dotenv
+import markdown
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def Post_detail(request, year, month, day, slug, post_id): #here we have to pass the arguments here inorder to display the revered url.
     post = get_object_or_404( #this help as to catch the error without using try and except method.
         Post,
         status = Post.Status.PUBLISHED, #return only published post
-        slug = post,
+        slug = slug,
         publish__year = year,
         publish__month=month,
-        publish__day=day
+        publish__day=day,
+        id=post_id
     )
     
     # then go to templates list.html
@@ -37,7 +53,7 @@ def Post_detail(request, year, month, day, post): #here we have to pass the argu
     try:
         comment_limit = int(request.GET.get("climit", 3))
     except (ValueError, TypeError):
-        comment_limit = 3
+        comment_limit = total_comments
     
     #clamp to sane bounds
     comment_limit = max(0, min(comment_limit, total_comments))
@@ -51,6 +67,8 @@ def Post_detail(request, year, month, day, post): #here we have to pass the argu
     llm_form = LLMForm()
     #list of similar posts
     post_tag_ids = post.tags.values_list('id', flat = True)
+    # INCREMENT TOTAL POST VIEW BY ONE
+    total_views = r.incr(f'post:{post.id}: views')
     similar_posts = (
         Post.published
         .filter(tags__in = post_tag_ids)
@@ -68,16 +86,18 @@ def Post_detail(request, year, month, day, post): #here we have to pass the argu
         {
             'post': post,
             'comments': comments,
-            'toal_comments': total_comments,
+            'total_comments': total_comments,
             'has_more_comments': has_more_comments,
             'next_comment_limit': next_comment_limit,
             'comment_limit': comment_limit,
             'llm_form': llm_form,
             'comment_form': comment_form,
-            'similar_posts':similar_posts
+            'similar_posts':similar_posts,
+            'total_views':total_views
         }
     )
-from taggit.models import Tag
+    
+@login_required
 def post_list(request, tag_slug = None):
     
     llm_form = LLMForm()
@@ -87,7 +107,6 @@ def post_list(request, tag_slug = None):
         tag = get_object_or_404(Tag, slug=tag_slug)
         post_list = post_list.filter(tags__in=[tag])
         
-    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
     #--pagination with 3 posts per page
     paginator = Paginator(post_list, 4) #from all published item take only three items.
     page_number = request.GET.get('page', 1)#  read ?page= from query string; default to page 1 if missing.
@@ -118,6 +137,7 @@ def home(request):
         request, 
         'blog/post/home.html'
     )
+@login_required
 def post_share(request, post_id):
     llm_form = LLMForm()
     post = get_object_or_404(
@@ -171,6 +191,8 @@ def post_comment(request, post_id):
     if form.is_valid():  #  validate the form data
         comment = form.save(commit=False)  #  create a comment object without saving
         comment.post = post  #  associate the comment with the post
+        comment.user = request.user
+        comment.name = request.user.username # set name from user
         comment.save()  #  save the comment to the database
     return render(  #  render the response with the post, form, and comment
         request,
@@ -182,7 +204,7 @@ def post_comment(request, post_id):
             'llm_form': llm_form
         }
     )
-    
+@login_required   
 def post_search(request):
     form = SearchForm()
     query = None
@@ -215,7 +237,7 @@ def post_search(request):
             'results': results
         }
     )
-
+@login_required
 def llm_page(request):
     llm_form = LLMForm(request.GET)
     return render(
@@ -224,16 +246,9 @@ def llm_page(request):
         {'llm_form': llm_form}
     )
 
-import os
-from dotenv import load_dotenv
-import markdown
-
 # Correct path: up one, then into foodie
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'foodie', '.env')
 load_dotenv(dotenv_path=env_path)
-import requests
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def llm_generate(request):
     if request.method == "POST":
@@ -273,4 +288,36 @@ def llm_generate(request):
             except Exception as e:
                 continue  # Try next key if error occurs
         return JsonResponse({"error": "All API keys failed or quota exceeded."}, status=500)
+
     return JsonResponse({"error": "Invalid request."}, status=400)
+
+@require_POST
+@login_required
+def post_like(request):
+    post_id = request.POST.get('id')
+    action = request.POST.get('action')
+
+    if post_id and action:
+        try:
+            post = Post.objects.get(id=post_id)
+
+            if action == 'like':
+                post.users_like.add(request.user)
+            else:
+                post.users_like.remove(request.user)
+
+            return JsonResponse({
+                'status': 'ok',
+                'total_likes': post.users_like.count()
+            })
+
+        except Post.DoesNotExist:
+            return JsonResponse({'status': 'error'})
+
+    return JsonResponse({'status': 'error'})
+
+r = redis.Redis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB
+)

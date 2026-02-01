@@ -19,27 +19,29 @@
   --accent: #7c5cff;
   --accent2: #2dd4bf;
   --accent3: #ff4d8d;
-
+  --fs-h1: 2.25rem;
   --radius: 18px;
   --shadow: 0 18px 55px rgba(0,0,0,.45);
 
   --container: 1120px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-/* Base layout (base.html uses #content + #sidebar siblings) */
 html, body{ height: 100%; }
 body{
   margin: 0;
   font-family: var(--font);
-  /* font-size: 1.1rem; */
   color: var(--text);
   background-color: var(--bg);
   min-height: 100vh;
   display: grid;
-  grid-template-columns:1fr 2fr 0.8fr;
+  grid-template-columns: minmax(350px, 25%) 1fr 300px;
   gap: 1.25rem;
-  padding: 1.5rem 1.25rem 3rem;
 }
 
 /* Page-load reveal: fade+slide from top */
@@ -62,7 +64,6 @@ body{
     animation: none;
   }
 }
-
 .post__body{
   padding: .55rem .6rem;
 }
@@ -71,64 +72,74 @@ body{
   justify-self: end;
   /* background-color: red; */
 }
+/* Increase content width when sidebar is hidden */
+#content.sidebar-hidden {
+  max-width: 60vw !important;
+  width: 60vw ;
+}
 /* .sidebar{ align-self: start; } */
-.llm--sidebar{
-  width: auto;
-  /* height: 100%; */
+.llm--sidebar {
+
+    /* Ensures it fills the 0.8fr grid column width completely */
+    width: 100%;
+    min-width: 350px !important; /* Your existing constraint */
+    padding: 0 !important;
+    background-color: #000000 !important;
 }
-/* llm button */
-.llm--btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 800;
-  font-size: 1.08rem;
-  letter-spacing: -0.01em;
+
+/* Container for the buttons */
+.top-controls {
+  position: sticky;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1001; /* Ensures it stays above all other content */
+  display: flex;
+  gap: 10px;
+  pointer-events: none; /* Allows clicking through the container background */
+}
+
+/* Base button style matching your theme */
+.action-btn {
+  pointer-events: auto; /* Re-enable clicks for the buttons themselves */
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  background: linear-gradient(90deg, #7c5cff 0%, #2dd4bf 50%, #ff4d8d 100%);
-  color: #fff;
-  box-shadow: 0 8px 32px rgba(124, 92, 255, 0.18), 0 2px 8px rgba(45,212,191,0.12);
-  transition:
-    background 0.4s cubic-bezier(.4,0,.2,1),
-    box-shadow 0.3s cubic-bezier(.4,0,.2,1),
-    transform 0.18s cubic-bezier(.4,0,.2,1),
-    color 0.2s;
-  position: relative;
-  overflow: hidden;
-  margin-top: 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px); /* Frosted glass effect */
 }
 
-.llm--btn::before {
-  content: "";
-  position: absolute;
-  left: -40%;
-  top: 0;
-  width: 180%;
-  height: 100%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(124,92,255,0.08) 100%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
+/* Hide/Unhide Button - Semi-transparent Dark */
+.toggle-btn {
+  background: rgba(30, 31, 34, 0.8);
+  color: #a9abb3;
 }
 
-.llm--btn:hover,
-.llm--btn:focus-visible {
-  background: linear-gradient(270deg, #ff4d8d 0%, #2dd4bf 50%, #7c5cff 100%);
-  color: #fff;
-  box-shadow: 0 12px 36px rgba(255,77,141,0.18), 0 2px 12px rgba(45,212,191,0.18);
-  transform: translateY(-2px) scale(1.04);
+.toggle-btn:hover {
+  background: rgba(43, 45, 49, 1);
+  color: #ffffff;
+  border-color: #7c4dff; /* Purple glow on hover */
 }
 
-.llm--btn:hover::before,
-.llm--btn:focus-visible::before {
-  opacity: 1;
-  animation: llm-btn-glow 0.7s linear;
+/* Logout Button - Deep Blue/Grey */
+.logout-btn {
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
 }
 
+.logout-btn:hover {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #2dd4bf; /* Teal glow on hover to match your 'Add comment' button */
+}
+
+/* Active/Click effect */
+.action-btn:active {
+  transform: translateY(2px);
+}
 @keyframes llm-btn-glow {
   0% { opacity: 0; }
   40% { opacity: 0.5; }
@@ -151,11 +162,94 @@ body{
 .llm--btn:focus-visible .llm--icon {
   filter: drop-shadow(0 0 8px #ff4d8d);
 }
+.comment__author{
+  border-bottom: 1px solid rgba(255,255,255,.10);
+
+}
+/* btn */
+/* --- Base Pill Button Style --- */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px; /* Fully rounded pill shape */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 10px 24px;
+  line-height: 1.2;
+}
+
+/* Hover lift effect for all buttons */
+.btn-pill:hover {
+  transform: translateY(-2px);
+}
+.btn-pill:active {
+  transform: translateY(0);
+}
+
+/* --- 1. Purple Gradient (Browse Posts) --- */
+.btn-purple {
+  /* Gradient from Blue to Purple */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); /* Purple glow */
+}
+
+.btn-purple:hover {
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
+  filter: brightness(1.1);
+}
+
+.btn-teal {
+  /* Bright Cyan Gradient */
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: #0f172a; /* Dark text for contrast against bright background */
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4); /* Cyan glow */
+}
+
+.btn-teal:hover {
+  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+  filter: brightness(1.05);
+}
+
+/* --- 3. Dark/Glass (Home & Search) --- */
+.btn-dark {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white on dark */
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  backdrop-filter: blur(5px);
+}
+
+.btn-dark:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* --- Utility: Small Button (for Search) --- */
+.btn-sm {
+  padding: 6px 16px;
+  font-size: 13px;
+  width: auto; /* Prevents it from stretching if inside flex */
+}
+
+/* --- Layout Adjustments (Optional) --- */
+/* Ensures buttons sit side-by-side in footer */
+.sidebar__footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
 /* ----- */
 .sidebar__card{
   position: sticky;
   margin-top: 2.5rem;
-  top: 1.25rem;
+  top: 3.5rem;
   padding: 1.1rem 1.1rem 1rem;
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
@@ -202,7 +296,8 @@ body{
 .sidebar__heading{
   margin: 0 0 .65rem 0;
   letter-spacing: -0.02em;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
+  border-bottom: 1px solid rgba(255,255,255,.10);
 }
 .sidebar__more{
   color: rgba(255,255,255,.70);
@@ -221,16 +316,15 @@ body{
   padding: 0;
   margin: 0;
   display: grid;
-  gap: .45rem;
 }
 
 .sidebar__link{
   display: grid;
   grid-template-columns: 10px 1fr;
-  gap: .6rem;
+  gap: 0.3rem;
   align-items: start;
 
-  padding: .55rem .6rem;
+  padding: .5rem .2rem;
   border-radius: 12px;
   text-decoration: none;
   color: rgba(255,255,255,.86);
@@ -254,8 +348,8 @@ body{
 }
 
 .sidebar__linktext{
-  line-height: 1.35;
-  font-weight: 650;
+  line-height: 1;
+  font-weight: 400;
 }
 
 .sidebar__link:focus-visible,
@@ -272,50 +366,6 @@ body{
   flex-wrap: wrap;
 }
 
-.sidebar__pill{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: .55rem .85rem;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 800;
-  color: rgba(255,255,255,.92);
-  background: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
-}
-.sidebar__pill:hover{
-  color: rgba(255,255,255,.92);
-  transform: translateY(-1px);
-}
-
-.sidebar__pill--soft{
-  color: rgba(255,255,255,.92);
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-}
-/* ----- */
-.sidebar__content ul{
-  list-style: none;
-  padding-left: 0.65rem;
-  margin: 0;
-  display: grid;
-  gap: .45rem;
-}
-/* anchor styling in the sidebar content */
-.sidebar__content a{
-
-  gap: .6rem;
-  padding: .55rem .6rem;
-  text-decoration: none;
-  color: var(--faint);
-}
-
-.sidebar__content a:hover{
-  color: rgba(255,255,255,.92);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
 .sidebar__content a:visited{
   color:  var(--accent);
 }
@@ -325,7 +375,12 @@ body{
 }
 .llm__sidebarcard{
   height: auto;
-  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin: 0 !important;
+  background-color: #000000 !important;
+  padding: 0 !important;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
 }
 @media (max-width: 980px){
   body{
@@ -342,7 +397,9 @@ body{
   border: 1px solid rgba(255,255,255,.10);
 
 }
-
+.similar__card{
+  margin-bottom: 1rem;
+}
 .panel__head{
   display: flex;
   align-items: baseline;
@@ -384,12 +441,6 @@ body{
 
 .btn:hover{ transform: translateY(-1px);
  }
-
-.btn--primary{
-  color: #061018;
-  background: linear-gradient(90deg, rgba(124,92,255,1), rgba(45,212,191,.95));
-  box-shadow: 0 14px 30px rgba(124,92,255,.18);
-}
 
 .btn--soft{
   background: rgba(255,255,255,.08);
@@ -469,8 +520,6 @@ select:focus{
   .cform__field{ grid-column: 1 / -1; }
 }
 
-
-
 .link {
   border-radius: 999px;
   color: var(--muted);
@@ -498,3 +547,139 @@ a:hover{
   background-color: var(--border);
 }
 
+/* Base Button Styling */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Space between icon and text */
+  
+  /* Size and Shape */
+  padding: 8px 16px;
+  border-radius: 20px; /* Pill shape */
+  
+  /* Typography & Colors */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none; /* Removes underline from link */
+  color: #555; /* Neutral text */
+  background-color: #f0f2f5; /* Light grey background */
+  
+  /* Transitions */
+  border: 1px solid transparent; /* Prevents layout shift on border changes */
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Icon Styling */
+.share-icon {
+  width: 16px;
+  height: 16px;
+  stroke: #555;
+  transition: stroke 0.2s ease;
+}
+
+/* --- HOVER STATE --- */
+.share-btn:hover {
+  background-color: #e7f3ff; /* Very light blue background */
+  color: #1877f2; /* Brand Blue text */
+}
+
+.share-btn:hover .share-icon {
+  stroke: #e0245e; /* Icon turns blue */
+}
+
+/* --- ACTIVE STATE (Click) --- */
+.share-btn:active {
+  transform: scale(0.96); /* Slight shrink effect */
+  background-color: #dbe7f2;
+}
+
+/* Optional: Focus State for Accessibility */
+.share-btn:focus-visible {
+  outline: 2px solid #1877f2;
+  outline-offset: 2px;
+}
+.share{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+/* Container for alignment */
+.like-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between button and count */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Base Button Styling */
+.like-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 20px; /* Pill shape */
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555; /* Default Text Color */
+  background-color: #f0f2f5; /* Light grey background */
+}
+
+/* Hover Effect */
+.like-btn:hover {
+  background-color: #e4e6eb;
+}
+
+/* The Heart Icon (CSS only) */
+/* We use ::before so your JS .innerHTML doesn't delete the icon */
+.like-btn::before {
+  content: '♥'; /* Unicode Heart */
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- STATE: NOT LIKED (Action is 'like') --- */
+.like-btn[data-action="like"]::before {
+  color: #65676b;
+  transform: scale(1);
+}
+
+/* --- STATE: LIKED (Action is 'unlike') --- */
+.like-btn[data-action="unlike"] {
+  color: #e0245e; /* Twitter Red Text */
+  background-color: rgba(224, 36, 94, 0.1); /* Light Red Background */
+}
+
+.like-btn[data-action="unlike"]::before {
+  color: #e0245e; /* Red Heart */
+  transform: scale(1.2); /* Make heart slightly bigger when liked */
+}
+
+/* Active Click Effect (Bounce) */
+.like-btn:active::before {
+  transform: scale(0.9);
+}
+
+/* Count Styling */
+.like-container .count {
+  font-size: 14px;
+  color: #65676b;
+}
+
+.like-container {
+  font-weight: bold;
+  color: #000;
+}
+.total {
+  font-weight: bold;
+  color: #f0f2f5;
+  margin-right: 0.5px;
+}

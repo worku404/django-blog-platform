@@ -1,0 +1,76 @@
+
+{% extends "account/base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <h3>Create Account</h3>
+   <!-- Display error messages -->
+  {% if messages %}
+    <ul class="messages" id="message">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}" >
+                {{ message|safe }}
+            </li>
+            <button type="button" class="close-btn" aria-label="Close message" onclick='document.getElementById("message").style.display="none" '>&times;</button>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <!-- Username -->
+    <label for="id_username">Username</label>
+    {{ user_form.username }}
+
+    <!-- Email -->
+    <label for="id_email">Email</label>
+    {{ user_form.email }}
+
+    <!-- Password -->
+    <label for="id_password">Password</label>
+    {{ user_form.password }}
+
+    <!-- Confirm Password -->
+    <label for="id_password2">Confirm Password</label>
+    {{ user_form.password2 }}
+
+    <button type="submit">Create Account</button>
+
+    <div class="extra-links">
+        <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</form>
+{% endblock %}
+
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const messagesContainer = document.querySelector('.messages');
+    if (!messagesContainer) return; // prevents JS error on pages without messages
+
+    messagesContainer.addEventListener('click', function (e) {
+        if (e.target.classList.contains('close-btn')) {
+            const messageItem = e.target.closest('.message');
+            if (messageItem) {
+                messageItem.style.opacity = '0';
+                messageItem.style.transform = 'translateY(-5px)';
+                setTimeout(() => messageItem.remove(), 200);
+            }
+        }
+    });
+});
+</script> -->
+
+<script>
+    const messagesContainer= document.getElementById('message')
+    function clickMe(){
+        messagesContainer.style.display='none'
+        console.log('done')
+    }
+</script>
