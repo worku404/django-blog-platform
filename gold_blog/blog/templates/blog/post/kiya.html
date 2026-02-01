@@ -232,7 +232,7 @@
         <div class="section-header">
           <h2 id="latest-title">Latest posts</h2>
 
-           {% if tag_list %}
+           {% comment %} {% if tag_list %}
             <div class="tag-cloud" aria-label="Browse by tag">
               {% for tag in tag_list %}
                 <a href="{% url 'blog:post_detail' post.publish.year post.publish.month post.publish.day post.slug post.id %}">
@@ -241,11 +241,12 @@
               {% endfor %}
             </div>
           {% endif %}
-        </div>
+        </div> {% endcomment %}
 
-        {% if posts %}
+        {% comment %} {% if posts %}
           <ul class="cards post-cards" role="list">
             {% for post in posts %}
+
               <li class="card post-card">
                 <article class="card-body">
                   <header class="post-header">
@@ -266,26 +267,27 @@
                         <span class="dot" aria-hidden="true">•</span>
                         <span class="tags">
                           {% for t in post.tags.all %}
-                            {% comment %} <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a> {% endcomment %}
+                            <a class="tag" href="{% url 'tag_detail' t.slug %}">#{{ t.name }}</a>
                           {% endfor %}
                         </span>
-                      {% endif %}
+                      {% endif %} 
                     </div>
-                  </header>
+                    {% endcomment %}
+                  {% comment %} </header> {% endcomment %}
 
-                  <p class="post-excerpt">
+                  {% comment %} <p class="post-excerpt">
                     {{ post.excerpt|default:post.body|truncatechars:180 }}
-                  </p>
+                  </p> {% endcomment %}
 
-                  <footer class="post-footer">
+                  {% comment %} <footer class="post-footer"> {% endcomment %}
                     {% comment %} <a class="btn btn-small" href="{% url 'post_detail' post.slug %}">Read more</a> {% endcomment %}
-                  </footer>
-                </article>
-              </li>
-            {% endfor %}
-          </ul>
+                  {% comment %} </footer> {% endcomment %}
+                {% comment %} </article> {% endcomment %}
+              {% comment %} </li> {% endcomment %}
+            {% comment %} {% endfor %} {% endcomment %}
+          {% comment %} </ul> {% endcomment %}
 
-          {% if is_paginated %}
+          {% comment %} {% if is_paginated %}
             <nav class="pagination" aria-label="Pagination">
               {% if page_obj.has_previous %}
                 <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
@@ -298,13 +300,13 @@
               {% endif %}
             </nav>
           {% endif %}
-        {% else %}
+        {% else %} {% endcomment %}
           <div class="empty-state card">
             <div class="card-body">
               <p>No posts yet. Check back soon.</p>
             </div>
           </div>
-        {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
       </div>
     </section>
   </main>
