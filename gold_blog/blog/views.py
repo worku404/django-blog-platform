@@ -68,7 +68,7 @@ def Post_detail(request, year, month, day, slug, post_id): #here we have to pass
     #list of similar posts
     post_tag_ids = post.tags.values_list('id', flat = True)
     # INCREMENT TOTAL POST VIEW BY ONE
-    total_views = r.incr(f'post:{post.id}: views')
+    # total_views = r.incr(f'post:{post.id}: views')
     similar_posts = (
         Post.published
         .filter(tags__in = post_tag_ids)
@@ -92,8 +92,8 @@ def Post_detail(request, year, month, day, slug, post_id): #here we have to pass
             'comment_limit': comment_limit,
             'llm_form': llm_form,
             'comment_form': comment_form,
-            'similar_posts':similar_posts,
-            'total_views':total_views
+            'similar_posts':similar_posts
+            # 'total_views':total_views
         }
     )
     
