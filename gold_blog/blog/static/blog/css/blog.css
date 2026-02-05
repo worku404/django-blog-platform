@@ -198,8 +198,10 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  padding: 10px 24px;
+  padding: 5px 15px;
   line-height: 1.2;
+  margin-bottom: 0;
+  margin-top: 10px;
 }
 
 /* Hover lift effect for all buttons */
@@ -318,7 +320,7 @@ body {
 .sidebar__heading {
   margin: 0 0 0.65rem 0;
   letter-spacing: -0.02em;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .sidebar__more {
@@ -339,7 +341,6 @@ body {
   margin: 0;
   display: grid;
 }
-
 .sidebar__link {
   display: grid;
   grid-template-columns: 10px 1fr;
@@ -533,8 +534,8 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.28);
-  border-color: rgba(124, 92, 255, 0.45);
+  /* box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.28);
+  border-color: rgba(124, 92, 255, 0.45); */
 }
 
 .errorlist {
@@ -680,7 +681,7 @@ a:hover {
 /* The Heart Icon (CSS only) */
 /* We use ::before so your JS .innerHTML doesn't delete the icon */
 .like-btn::before {
-  content: "â™¥"; /* Unicode Heart */
+  content: "♥"; /* Unicode Heart */
   font-size: 18px;
   line-height: 1;
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);

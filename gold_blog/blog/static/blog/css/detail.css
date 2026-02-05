@@ -379,5 +379,5 @@
 }
 /* Keep layout consistent with blog.css so the sidebar rail isn't overridden. */
 .post{
-  margin-right: 10px;
+  margin: 0 auto;
 }

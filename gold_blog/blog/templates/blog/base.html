@@ -106,6 +106,16 @@
                     <p class="sidebar__subtitle">
                       Writing, notes, and updates.
                     </p>
+                    <span>
+                      <a class="btn-pill btn-dark" href="{% url 'blog:home' %}"
+                    >Home</a>
+                    </span>
+                    <span>
+                       <a
+                    class="btn-pill btn-purple"
+                    href="{% url 'blog:post_list' %}"
+                    >Browse posts</a>
+                    </span>
                   </div>
                 </div>
 
@@ -116,7 +126,7 @@
                   class="llm__sidebarcard sidebar__card"
                 >
                   <div class="sidebar__sectionhead">
-                    <h3 class="sidebar__heading">Chat with Gold AI</h3>
+                    <h3 class="sidebar__heading">Chat with AI</h3>
                     <a class="sidebar__more" href="{% url 'blog:llm_page' %}">Open &rarr;</a
                     >
                   </div>
@@ -140,7 +150,7 @@
                       >All &rarr;</a
                     >
                   </div>
-                  <div class="sidebar__content">{% show_latest_posts 3 %}</div>
+                  <div class="sidebar__content">{% show_latest_posts 5 %}</div>
                 </section>
 
                 <section
