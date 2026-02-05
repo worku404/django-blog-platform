@@ -1,70 +1,80 @@
 {% load static %}
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'blog/css/llm_widget.css' %}?v=20260121">
-{% endblock %}
-<aside class="sidebar-widget-llm">
-  <div class="llm-widget-title" style="margin-bottom: 1rem;">
-    <span class="brand-mark" aria-hidden="true">G</span>
-    <span class="brand-text">Gold</span>
-    <span class="brand-sub">AI</span>
-  </div>
-  <div id="history-container" class="llm-chat-history"></div>
+<link rel="stylesheet" href="{% static 'blog/css/llm_widget.css' %}?v=20260205">
+<div class="sidebar-widget-llm">
+  <div id="history-container" class="llm-chat-history" aria-live="polite"></div>
   {% include "blog/post/includes/llm_chat_component.html" %}
-</aside>
+</div>
 <script>
-const history = [];
-function renderHistory() {
-    const container = document.getElementById('history-container');
-    container.innerHTML = '';
-    history.forEach(item => {
-        const entry = document.createElement('div');
-        entry.className = 'llm-chat-entry';
-        entry.innerHTML = `
-            <div class="llm-chat-user">You:</div>
-            <div class="llm-chat-user-msg">${item.prompt}</div>
-            <div class="llm-chat-ai">AI:</div>
-            <div class="llm-chat-ai-msg">${item.response}</div>
-        `;
-        container.appendChild(entry);
+  const history = [];
+
+  function renderHistory() {
+    const container = document.getElementById("history-container");
+    container.innerHTML = "";
+    history.forEach((item) => {
+      const entry = document.createElement("div");
+      entry.className = "llm-chat-entry";
+      entry.innerHTML = `
+        <div class="llm-chat-user">You</div>
+        <div class="llm-chat-user-msg">${item.prompt}</div>
+        <div class="llm-chat-ai">AI</div>
+        <div class="llm-chat-ai-msg">${item.response}</div>
+      `;
+      container.appendChild(entry);
     });
     container.scrollTop = container.scrollHeight;
-}
-const form = document.getElementById('llm-form');
-const promptInput = document.getElementById('id_prompt');
-const sendBtn = form.querySelector('button[type="submit"]');
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const prompt = promptInput.value.trim();
-    if (!prompt) return;
-    sendBtn.disabled = true;
-    let aiResponse = "Generating...";
-    history.push({prompt: prompt, response: aiResponse});
-    renderHistory();
-    const response = await fetch("{% url 'blog:llm_generate' %}", {
+  }
+
+  const form = document.getElementById("llm-form");
+  const promptInput = document.getElementById("id_prompt");
+  if (form && promptInput) {
+    const sendBtn = form.querySelector('button[type="submit"]');
+    const maxInputHeight = 152;
+
+    const autoGrow = () => {
+      promptInput.style.height = "auto";
+      const next = Math.min(promptInput.scrollHeight, maxInputHeight);
+      promptInput.style.height = `${next}px`;
+      promptInput.style.overflowY =
+        promptInput.scrollHeight > maxInputHeight ? "auto" : "hidden";
+    };
+
+    autoGrow();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+      sendBtn.disabled = true;
+      let aiResponse = "Generating...";
+      history.push({ prompt: prompt, response: aiResponse });
+      renderHistory();
+
+      const response = await fetch("{% url 'blog:llm_generate' %}", {
         method: "POST",
         headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/x-www-form-urlencoded"
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({prompt: prompt})
+        body: new URLSearchParams({ prompt: prompt }),
+      });
+
+      const data = await response.json();
+      aiResponse = data.generated || data.error || "Something went wrong.";
+      history[history.length - 1].response = aiResponse;
+      renderHistory();
+      promptInput.value = "";
+      autoGrow();
+      sendBtn.disabled = false;
+      promptInput.focus();
     });
-    const data = await response.json();
-    aiResponse = data.generated || data.error || "Something went wrong.";
-    history[history.length - 1].response = aiResponse;
-    renderHistory();
-    promptInput.value = "";
-    sendBtn.disabled = false;
-    promptInput.focus();
-});
-// Send on Enter (but allow Shift+Enter for newline)
-promptInput.addEventListener('keydown', function(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
+
+    promptInput.addEventListener("input", autoGrow);
+
+    promptInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-    }
-});
-{% comment %} const charCount = document.getElementById('char-count');
-promptInput.addEventListener('input', function() {
-    charCount.textContent = promptInput.value.length;
-}); {% endcomment %}
+        form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
 </script>

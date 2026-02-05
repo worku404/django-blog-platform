@@ -1,11 +1,10 @@
-{% load blog_tags %}
-{% load static %}
-<!DOCTYPE html>
+{% load blog_tags %} {% load static %}
+<!doctype html>
 <html lang="en">
-<head>
-    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,98 +12,242 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link href='{% static "blog/css/blog.css" %}' rel='stylesheet'>
+    <link href='{% static "blog/css/blog.css" %}' rel="stylesheet" />
     {% block extra_head %}{% endblock %}
-</head>
-<body>
-    {% block sidebar %}
-    <div class='llm--sidebar '>
-        <div class='llm__sidebarcard sidebar__card' style="margin-bottom: 0.5rem;">
-                <a href="{% url 'blog:llm_page' %}">Chat with Gold AI →</a>
-                {% include "blog/post/includes/llm_widget.html" with form=llm_form %}
-        </div>
-    </div>
-    {%endblock%}
-    <div id='content'>
-        {% block content %}{% endblock %}
-    </div>
-    <div id='sidebar' class="sidebar">
-        <div class="top-controls">
-        <button id="toggleBtn" onclick="myFunction()" class="action-btn toggle-btn">Hide</button>
-        
-        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="action-btn logout-btn">Log out</button>
-        </form>
-        </div>
-        <div id="hide" class="sidebar__card">
-            <div class="sidebar__brand">
-                <div class="sidebar__mark" aria-hidden="true"></div>
-                <div>
-                    <h2 class="sidebar__title">My blog</h2>
-                    <p class="sidebar__subtitle">Writing, notes, and updates.</p>
-                </div>
-            </div>
-            {% include "blog/post/includes/search_form.html" with form=form %}
-            <p>
-                {% comment %} <a href="{% url "blog:post_feed" %}">
-                    Subscribe to my RSS feed
-                </a> {% endcomment %}
-            </p>
-            <section class="sidebar__section" aria-label="Latest posts">
-            <div class="sidebar__sectionhead">
-                <h3 class="sidebar__heading">Latest posts</h3>
-                <a class="sidebar__more" href="{% url 'blog:post_list' %}">All →</a>
-            </div>
-            <div class="sidebar__content">
-                {% show_latest_posts 3 %}
-            </div>
-            </section>
-            <section class="sidebar__section" aria-label="Most commented posts">
-            <h3 class="sidebar__heading">Most commented</h3>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside id="sidebar" class="sidebar main-menu" aria-label="Sidebar">
+        <div class="settings"></div>
 
-            {% get_most_commented_posts as most_commented_posts %}
-            <ul class="sidebar__list">
-                {% for post in most_commented_posts %}
-                    <li class="sidebar__item">
-                        <a class="sidebar__link" href="{{ post.get_absolute_url }}">
-                            <span class="sidebar__bullet" aria-hidden="true"></span>
-                            <span class="sidebar__linktext">{{ post.title|truncatechars:30 }}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-            </section>
-            <div class="sidebar__footer">
-                <a class="btn-pill btn-purple" href="{% url 'blog:post_list' %}">Browse posts</a>
-                <a class="btn-pill btn-dark" href="{% url 'blog:home' %}">Home</a>
-            </div>
+        <div class="sidebar__rail" aria-label="Sidebar sections">
+          <div class="sidebar__rail-top">
+            
+          </div>
+
+          <nav class="sidebar__rail-nav">
+            <a
+              class="sidebar__rail-link is-active"
+              href="#sidebar-llm"
+              data-section="sidebar-llm"
+            >
+              <span
+                class="sidebar__rail-icon sidebar__icon--chat"
+                aria-hidden="true"
+              ></span>
+              <span class="sidebar__rail-text">AI</span>
+            </a>
+            <a
+              class="sidebar__rail-link"
+              href="#sidebar-search"
+              data-section="sidebar-search"
+            >
+              <span
+                class="sidebar__rail-icon sidebar__icon--search"
+                aria-hidden="true"
+              ></span>
+              <span class="sidebar__rail-text">Search</span>
+            </a>
+            <a
+              class="sidebar__rail-link"
+              href="#sidebar-latest"
+              data-section="sidebar-latest"
+            >
+              <span
+                class="sidebar__rail-icon sidebar__icon--latest"
+                aria-hidden="true"
+              ></span>
+              <span class="sidebar__rail-text">Latest</span>
+            </a>
+            <a
+              class="sidebar__rail-link"
+              href="#sidebar-most"
+              data-section="sidebar-most"
+            >
+              <span
+                class="sidebar__rail-icon sidebar__icon--most"
+                aria-hidden="true"
+              ></span>
+              <span class="sidebar__rail-text">Most</span>
+            </a>
+            <a
+              class="sidebar__rail-link"
+              href="#sidebar-links"
+              data-section="sidebar-links"
+            >
+              <span
+                class="sidebar__rail-icon sidebar__icon--links"
+                aria-hidden="true"
+              ></span>
+              <span class="sidebar__rail-text">Links</span>
+            </a>
+          </nav>
+
+          <div class="sidebar__rail-bottom">
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="action-btn logout-btn">
+                Log out
+              </button>
+            </form>
+          </div>
         </div>
+
+        <div class="sidebar__panel">
+          <div class="scrollbar" id="style-1">
+            <div id="hide">
+             
+
+              <div class="sidebar__card">
+                <div class="sidebar__brand">
+                  <div class="sidebar__mark" aria-hidden="true"></div>
+                  <div>
+                    <h2 class="sidebar__title">My blog</h2>
+                    <p class="sidebar__subtitle">
+                      Writing, notes, and updates.
+                    </p>
+                  </div>
+                </div>
+
+                 {% block sidebar %}
+              <div class="llm--sidebar">
+                <section
+                  id="sidebar-llm"
+                  class="llm__sidebarcard sidebar__card"
+                >
+                  <div class="sidebar__sectionhead">
+                    <h3 class="sidebar__heading">Chat with Gold AI</h3>
+                    <a class="sidebar__more" href="{% url 'blog:llm_page' %}">Open &rarr;</a
+                    >
+                  </div>
+                  {% include "blog/post/includes/llm_widget.html" with form=llm_form %}
+                </section>
+              </div>
+              {% endblock %}
+
+                <section id="sidebar-search" class="sidebar__section">
+                  {% include "blog/post/includes/search_form.html" with form=form %}
+                </section>
+
+                <section
+                  id="sidebar-latest"
+                  class="sidebar__section"
+                  aria-label="Latest posts"
+                >
+                  <div class="sidebar__sectionhead">
+                    <h3 class="sidebar__heading">Latest posts</h3>
+                    <a class="sidebar__more" href="{% url 'blog:post_list' %}"
+                      >All &rarr;</a
+                    >
+                  </div>
+                  <div class="sidebar__content">{% show_latest_posts 3 %}</div>
+                </section>
+
+                <section
+                  id="sidebar-most"
+                  class="sidebar__section"
+                  aria-label="Most commented posts"
+                >
+                  <h3 class="sidebar__heading">Most commented</h3>
+
+                  {% get_most_commented_posts as most_commented_posts %}
+                  <ul class="sidebar__list">
+                    {% for post in most_commented_posts %}
+                    <li class="sidebar__item">
+                      <a
+                        class="sidebar__link"
+                        href="{{ post.get_absolute_url }}"
+                      >
+                        <span class="sidebar__bullet" aria-hidden="true"></span>
+                        <span class="sidebar__linktext"
+                          >{{ post.title|truncatechars:30 }}</span
+                        >
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </section>
+
+                <div id="sidebar-links" class="sidebar__footer">
+                  <a
+                    class="btn-pill btn-purple"
+                    href="{% url 'blog:post_list' %}"
+                    >Browse posts</a
+                  >
+                  <a class="btn-pill btn-dark" href="{% url 'blog:home' %}"
+                    >Home</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main id="content" class="content">
+        {% block content %}{% endblock %}
+      </main>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const nav = document.querySelector(".sidebar__rail-nav");
+        const links = nav.querySelectorAll(".sidebar__rail-link");
+        const sidebarCard = document.querySelector(".sidebar__card");
+        const panels = document.querySelectorAll(
+          ".sidebar__panel .sidebar__section, .sidebar__panel .llm__sidebarcard, .sidebar__panel .sidebar__footer"
+        );
+
+        const hideAll = () => {
+          panels.forEach((p) => {
+            p.classList.remove("is-visible");
+            p.setAttribute("aria-hidden", "true");
+          });
+          if (sidebarCard) sidebarCard.classList.add("is-collapsed");
+          document.querySelector(".app-shell")?.classList.add("sidebar-collapsed");
+        };
+
+        const showPanel = (id) => {
+          const panel = document.getElementById(id);
+          if (!panel) return;
+          if (sidebarCard) sidebarCard.classList.remove("is-collapsed");
+          document.querySelector(".app-shell")?.classList.remove("sidebar-collapsed");
+          panel.classList.add("is-visible");
+          panel.setAttribute("aria-hidden", "false");
+        };
+
+        // Default: open the first active panel if any
+        hideAll();
+        const activeLink =
+          nav.querySelector(".sidebar__rail-link.is-active") || links[0];
+        if (activeLink) showPanel(activeLink.dataset.section);
+
+        nav.addEventListener("click", (e) => {
+          const link = e.target.closest(".sidebar__rail-link");
+          if (!link) return;
+
+          e.preventDefault();
+
+          const isActive = link.classList.contains("is-active");
+
+          links.forEach((l) => l.classList.remove("is-active"));
+          hideAll();
+
+          if (!isActive) {
+            link.classList.add("is-active");
+            showPanel(link.dataset.section);
+          }
+        });
+      });
+    </script>
+
     <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script>
-        const csrftoken = Cookies.get('csrftoken');
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // DOM loaded
-            {% block domready %}
-            {% endblock %}
-        })
+      const csrftoken = Cookies.get('csrftoken');
+      document.addEventListener('DOMContentLoaded', (event) => {
+          {% block domready %}
+          {% endblock %}
+      })
     </script>
-</body>
+    
+  </body>
 </html>
-<script>
-function myFunction() {
-  var x = document.getElementById("hide");
-  var btn = document.getElementById("toggleBtn");
-  var content = document.getElementById("content");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-    btn.textContent = "Hide";
-    content.classList.remove("sidebar-hidden");
-  } else {
-    x.style.display = "none";
-    btn.textContent = "Unhide";
-    content.classList.add("sidebar-hidden");
-  }
-}
-</script>

@@ -8,34 +8,36 @@
 {% block content %}
 <section class="postlist">
   <div class="postlist__container">
-    <header class="postlist__header">
-      <div class="postlist__titlewrap">
-        <h1 class="postlist__title">My Blog</h1>
+    <header class="postlist__header panel panel--card">
+      <div class="postlist__head panel__head">
+        <div class="postlist__titlewrap">
+          <h1 class="postlist__title panel__title">My Blog</h1>
 
         {% if tag %}
-          <p class="postlist__subtitle">
+          <p class="postlist__subtitle panel__sub">
             Posts tagged
             <span class="chip chip--accent">#{{ tag.name }}</span>
           </p>
       {% else %}
-        <p class="postlist__subtitle">
+        <p class="postlist__subtitle panel__sub">
           Latest writing, notes, and updates.
         </p>
       {% endif %}
 
 
-      </div>
+        </div>
 
-      <div class="postlist__toolbar" aria-label="Post tools">
+        <div class="postlist__toolbar" aria-label="Post tools">
 
-        {% if not tag %}
-          <p class="postlist__stats">
-            I've written <span class="postcount">{% total_posts %}</span> posts so far.
-          </p>
-        {% endif %}
-        <div class="postlist__actions">
-          <a class="btn btn--soft" href="{% url 'blog:post_list' %}">All posts</a>
-          <a class="btn btn--primary" href="{% url 'blog:home' %}">Home</a>
+          {% if not tag %}
+            <p class="postlist__stats">
+              I've written <span class="postcount">{% total_posts %}</span> posts so far.
+            </p>
+          {% endif %}
+          <div class="postlist__actions">
+            <a class="btn btn--soft" href="{% url 'blog:post_list' %}">All posts</a>
+            <a class="btn btn--ghost" href="{% url 'blog:home' %}">Home</a>
+          </div>
         </div>
       </div>
     </header>

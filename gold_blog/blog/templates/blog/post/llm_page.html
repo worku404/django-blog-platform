@@ -3,77 +3,90 @@
 {% block sidebar %}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'blog/css/llm.css' %}?v=20260121">
+<link rel="stylesheet" href="{% static 'blog/css/llm_widget.css' %}?v=20260205">
+<link rel="stylesheet" href="{% static 'blog/css/llm.css' %}?v=20260205">
 {% endblock %}
 {% block content %}
-<div class="llm-chat-container">
-<p><a href="{% url 'blog:post_list' %}" class="llm-back-link">← Back</a></p>
-  <div class="llm-chat-title">ሰላም ሰላም ሰዎች እንዴት ናችሁ🙋‍♂️🙋‍♂️ ምን ልታዘዝ ምን ይምጣ☺️</div>
-  <div id="history-container" class="llm-chat-history"></div>
-{% include "blog/post/includes/llm_chat_component.html" %}
-</div>
+<section class="llm-page">
+  <div class="llm-page__header">
+    <a href="{% url 'blog:post_list' %}" class="llm-back-link">&larr; Back</a>
+    <h1 class="llm-page__title">Chat with Gold AI</h1>
+  </div>
+  <div id="history-container" class="llm-chat-history" aria-live="polite"></div>
+  {% include "blog/post/includes/llm_chat_component.html" %}
+</section>
 <script>
-const history = [];
+  const history = [];
 
-function renderHistory() {
-    const container = document.getElementById('history-container');
-    container.innerHTML = '';
-    history.forEach(item => {
-        const entry = document.createElement('div');
-        entry.className = 'llm-chat-entry';
-        entry.innerHTML = `
-            <div class="llm-chat-user">You:</div>
-            <div class="llm-chat-user-msg">${item.prompt}</div>
-            <div class="llm-chat-ai">AI:</div>
-            <div class="llm-chat-ai-msg">${item.response}</div>
-        `;
-        container.appendChild(entry);
+  function renderHistory() {
+    const container = document.getElementById("history-container");
+    container.innerHTML = "";
+    history.forEach((item) => {
+      const entry = document.createElement("div");
+      entry.className = "llm-chat-entry";
+      entry.innerHTML = `
+        <div class="llm-chat-user">You</div>
+        <div class="llm-chat-user-msg">${item.prompt}</div>
+        <div class="llm-chat-ai">AI</div>
+        <div class="llm-chat-ai-msg">${item.response}</div>
+      `;
+      container.appendChild(entry);
     });
     container.scrollTop = container.scrollHeight;
-}
+  }
 
-const form = document.getElementById('llm-form');
-const promptInput = document.getElementById('id_prompt');
-const sendBtn = form.querySelector('button[type="submit"]');
+  const form = document.getElementById("llm-form");
+  const promptInput = document.getElementById("id_prompt");
+  if (form && promptInput) {
+    const sendBtn = form.querySelector('button[type="submit"]');
+    const maxInputHeight = 220;
 
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const prompt = promptInput.value.trim();
-    if (!prompt) return;
-    sendBtn.disabled = true;
-    let aiResponse = "Generating...";
-    history.push({prompt: prompt, response: aiResponse});
-    renderHistory();
+    const autoGrow = () => {
+      promptInput.style.height = "auto";
+      const next = Math.min(promptInput.scrollHeight, maxInputHeight);
+      promptInput.style.height = `${next}px`;
+      promptInput.style.overflowY =
+        promptInput.scrollHeight > maxInputHeight ? "auto" : "hidden";
+    };
 
-    const response = await fetch("{% url 'blog:llm_generate' %}", {
+    autoGrow();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+      sendBtn.disabled = true;
+      let aiResponse = "Generating...";
+      history.push({ prompt: prompt, response: aiResponse });
+      renderHistory();
+
+      const response = await fetch("{% url 'blog:llm_generate' %}", {
         method: "POST",
         headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/x-www-form-urlencoded"
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({prompt: prompt})
+        body: new URLSearchParams({ prompt: prompt }),
+      });
+
+      const data = await response.json();
+      aiResponse = data.generated || data.error || "Something went wrong.";
+      history[history.length - 1].response = aiResponse;
+      renderHistory();
+      promptInput.value = "";
+      autoGrow();
+      sendBtn.disabled = false;
+      promptInput.focus();
     });
 
-    const data = await response.json();
-    aiResponse = data.generated || data.error || "Something went wrong.";
-    history[history.length - 1].response = aiResponse;
-    renderHistory();
-    promptInput.value = "";
-    sendBtn.disabled = false;
-    promptInput.focus();
-});
+    promptInput.addEventListener("input", autoGrow);
 
-// Send on Enter (but allow Shift+Enter for newline)
-promptInput.addEventListener('keydown', function(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
+    promptInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-    }
-});
-// Add after your existing JS in llm_page.html
-const charCount = document.getElementById('char-count');
-promptInput.addEventListener('input', function() {
-    charCount.textContent = promptInput.value.length;
-});
+        form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
 </script>
 {% endblock %}
