@@ -145,6 +145,25 @@ form label {
     color: #ff6b6b;
 }
 
+/* Custom form error block (used on password change) */
+.form-errors {
+    margin: 12px 0 6px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background-color: rgba(255, 80, 80, 0.15);
+    border: 1px solid rgba(255, 80, 80, 0.4);
+    color: #ffb3b3;
+    font-size: 14px;
+}
+
+.form-errors p {
+    margin: 0 0 6px 0;
+}
+
+.form-errors p:last-child {
+    margin-bottom: 0;
+}
+
 /* Tweak button spacing for longer forms */
 form button {
     margin-top: 30px;
@@ -210,6 +229,77 @@ form button {
     font-size: 15px;
     margin-bottom: 30px;
     color: #e0e0e0;
+}
+
+/* Password change success card */
+.success-card {
+    text-align: center;
+    padding: 52px 40px;
+}
+
+.success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 999px;
+    background: #22c55e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(34, 197, 94, 0.35);
+}
+
+.success-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.success-title {
+    font-size: 30px;
+    margin: 6px 0 12px;
+    font-weight: 700;
+}
+
+.success-subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 14px;
+}
+
+.success-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.68);
+    margin-bottom: 26px;
+}
+
+.primary-btn--gradient {
+    background: linear-gradient(135deg, #5b6bff 0%, #1fb6ff 100%);
+    color: #ffffff;
+    box-shadow: 0 14px 24px rgba(34, 127, 255, 0.35);
+    border: none;
+}
+
+.primary-btn--gradient:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+.success-footer {
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.success-link {
+    color: #44d0ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.success-link:hover {
+    text-decoration: underline;
 }
 
 /* home button */
