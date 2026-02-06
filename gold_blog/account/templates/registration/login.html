@@ -16,6 +16,11 @@
    <div class="top-nav">
         <a href="{% url 'blog:home' %}" class="home-link">← Home</a>
     </div>
+    {% if form.errors %}
+    <div class="form-errors">
+        <p>Invalid username or password. Please try again.</p>
+    </div>
+    {% endif %}
     <!-- Username Field -->
     <label for="id_username">Username</label>
     {{ form.username }}

@@ -7,7 +7,7 @@
 
 {% endblock %}
 
-{% comment %} {% block content %}
+{% block content %}
   {% if comment %}
     <section class="panel panel--card">
       <div class="panel__head">
@@ -20,4 +20,4 @@
   {% else %}
     {% include "blog/post/includes/comment_form.html" %}
   {% endif %}
-{% endblock %} {% endcomment %}
+{% endblock %} 
