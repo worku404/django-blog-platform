@@ -5,7 +5,20 @@
   {% include "blog/post/includes/llm_chat_component.html" %}
 </div>
 <script>
-  const history = [];
+  const historyEl = document.getElementById("llm-history");
+  const history = historyEl ? JSON.parse(historyEl.textContent || "[]") : [];
+
+  const escapeHtml = (value) =>
+    String(value).replace(/[&<>"']/g, (char) => {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+      return map[char] || char;
+    });
 
   function renderHistory() {
     const container = document.getElementById("history-container");
@@ -15,7 +28,7 @@
       entry.className = "llm-chat-entry";
       entry.innerHTML = `
         <div class="llm-chat-user">You</div>
-        <div class="llm-chat-user-msg">${item.prompt}</div>
+        <div class="llm-chat-user-msg">${escapeHtml(item.prompt)}</div>
         <div class="llm-chat-ai">AI</div>
         <div class="llm-chat-ai-msg">${item.response}</div>
       `;
@@ -23,11 +36,15 @@
     });
     container.scrollTop = container.scrollHeight;
   }
+  renderHistory();
+
 
   const form = document.getElementById("llm-form");
   const promptInput = document.getElementById("id_prompt");
   if (form && promptInput) {
     const sendBtn = form.querySelector('button[type="submit"]');
+    const csrfInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
+    const csrfToken = csrfInput ? csrfInput.value : "";
     const maxInputHeight = 152;
 
     const autoGrow = () => {
@@ -54,12 +71,23 @@
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
         },
+        credentials: "same-origin",
         body: new URLSearchParams({ prompt: prompt }),
       });
 
-      const data = await response.json();
-      aiResponse = data.generated || data.error || "Something went wrong.";
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (err) {
+        data = {};
+      }
+      if (!response.ok) {
+        aiResponse = data.error || `Request failed (${response.status}).`;
+      } else {
+        aiResponse = data.generated || data.error || "Something went wrong.";
+      }
       history[history.length - 1].response = aiResponse;
       renderHistory();
       promptInput.value = "";

@@ -26,7 +26,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import requests
 from django.http import JsonResponse,HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 
 import os
 from dotenv import load_dotenv
@@ -239,60 +238,9 @@ def post_search(request):
             'llm_form': llm_form
         }
     )
-@login_required
-def llm_page(request):
-    llm_form = LLMForm(request.GET)
-    return render(
-        request,
-        'blog/post/llm_page.html',
-        {'llm_form': llm_form}
-    )
 
-# Correct path: up one, then into foodie
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'foodie', '.env')
 load_dotenv(dotenv_path=env_path)
-@csrf_exempt
-def llm_generate(request):
-    if request.method == "POST":
-        prompt = request.POST.get("prompt") #text input
-        # List of API keys (fallback order)
-        api_keys = [
-            os.getenv("GEMINI_API_KEY_1"),
-            os.getenv("GEMINI_API_KEY_2"),
-            os.getenv("GEMINI_API_KEY_3"),
-            os.getenv("GEMINI_API_KEY_4"),
-        ]
-        url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent"
-        data = {
-            "contents": [
-                {
-                    "parts": [
-                        {"text": prompt}
-                    ]
-                }
-            ]
-        }
-        for api_key in api_keys:
-            if not api_key:
-                continue  # Skip if key is missing
-            headers = {
-                "Content-Type": "application/json",
-                "x-goog-api-key": api_key
-            }
-            try:
-                response = requests.post(url, headers=headers, json=data, timeout=15)
-                if response.status_code == 200:
-                    content = response.json()
-                    generated = content["candidates"][0]["content"]["parts"][0]["text"]
-                    #convert to Markdown to HTML
-                    generated_html = markdown.markdown(generated)
-                    return JsonResponse({"generated": generated_html})
-            except Exception as e:
-                continue  # Try next key if error occurs
-        return JsonResponse({"error": "All API keys failed or quota exceeded."}, status=500)
-
-    return JsonResponse({"error": "Invalid request."}, status=400)
-
 @require_POST
 @login_required
 def post_like(request):
@@ -323,3 +271,89 @@ def post_like(request):
 #     port=settings.REDIS_PORT,
 #     db=settings.REDIS_DB
 # )
+@require_POST
+@login_required
+def llm_generate(request):
+    prompt = (request.POST.get("prompt") or "").strip()
+    if not prompt:
+        return JsonResponse({"error": "Prompt is required."}, status=400)
+
+    # Get prior history from session (list of {"prompt":..., "response":...})
+    url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent"
+    history = request.session.get("llm_history", [])
+
+    # Optional: limit memory to last N turns to avoid token overflow
+    max_turns = 3
+    history = history[-max_turns:]
+
+    # Build Gemini contents from history + new prompt
+    contents = []
+    for item in history:
+        if item.get("prompt"):
+            contents.append({"role": "user", "parts": [{"text": item["prompt"]}]})
+        if item.get("response"):
+            contents.append({"role": "model", "parts": [{"text": item["response"]}]})
+
+    contents.append({"role": "user", "parts": [{"text": prompt}]})
+
+    data = {"contents": contents}
+
+    # Call Gemini (your existing API loop)
+    api_keys = [
+            os.getenv("GEMINI_API_KEY_1"),
+            os.getenv("GEMINI_API_KEY_2"),
+            os.getenv("GEMINI_API_KEY_3"),
+            os.getenv("GEMINI_API_KEY_4"),
+        ]
+    last_error = None
+    for api_key in api_keys:
+        if not api_key:
+            continue
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key
+        }
+        try:
+            response = requests.post(url, headers=headers, json=data, timeout=20)
+            if response.status_code == 200:
+                content = response.json()
+                generated = content["candidates"][0]["content"]["parts"][0]["text"]
+
+                # Save new turn to session
+                history.append({"prompt": prompt, "response": generated})
+                request.session["llm_history"] = history
+                request.session.modified = True
+
+                # Return HTML for display
+                return JsonResponse({"generated": markdown.markdown(generated)})
+            last_error = {"status": response.status_code}
+        except Exception as exc:
+            last_error = {"error": str(exc)}
+            continue
+
+    return JsonResponse(
+        {
+            "error": "All API keys failed or quota exceeded.",
+            "details": last_error,
+        },
+        status=500,
+    )
+
+@login_required
+def llm_page(request):
+    llm_form = LLMForm()
+    history = request.session.get("llm_history", [])
+
+    # Convert response text to HTML for display
+    history_ui = [
+        {"prompt": h["prompt"], "response": markdown.markdown(h["response"])}
+        for h in history
+    ]
+
+    return render(
+        request,
+        "blog/post/llm_page.html",
+        {"llm_form": llm_form, 
+         "llm_history": history_ui
+         }
+    )

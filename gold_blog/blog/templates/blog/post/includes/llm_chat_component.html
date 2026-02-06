@@ -1,4 +1,5 @@
 <form id="llm-form" class="llm-form" autocomplete="off">
+  {% csrf_token %}
   <div class="llm-input">
     {{ llm_form.prompt }}
   </div>
