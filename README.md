@@ -1,131 +1,86 @@
-# Django Blog Project
+﻿# Gold Blog
 
-A clean, content‑focused blog built with **Django**. This project delivers a simple, elegant publishing experience with a responsive, readable interface and a template‑driven architecture that is easy to extend.
+A Django blog with authentication, tagging, search, email sharing, likes,comments and an integrated AI chat assistant.
 
----
+## Overview
+Gold Blog is a production-style Django app with a clean UI, Markdown posts, and a sidebar AI assistant. Most content pages require authentication.
 
-## ✨ Overview
+## Key Features
+- User auth: register, login, logout, password reset, change password
+- AI chat assistant in the sidebar and a full page, session-based history, Gemini API backend
+- Post publishing with drafts, tags, and related-post recommendations
+- Markdown rendering for post bodies
+- Commenting system for posts (user-linked, moderation-ready)
+- Search using PostgreSQL trigram similarity
+- Share posts by email (SMTP)
+- Like and unlike posts with AJAX
+- RSS feed for latest posts
+- Sidebar widgets for latest posts and most-commented posts
+- Pagination and tag filtering
+- Optional Google OAuth login
 
-**django-blog-project** is a minimal yet functional blogging website designed for authors who want to publish and manage posts with clarity and ease. The application focuses on a straightforward user experience, fast page loads, and content‑first design.
+## Tech Stack
+- Django 6.x, Python 3
+- PostgreSQL recommended (SQLite supported for local dev)
+- django-taggit, social-auth-app-django, python-decouple, python-dotenv
+- Google Gemini API via requests, Markdown for rendering AI responses
+- WhiteNoise for static files, Gunicorn for deployment
+- Commenting system for posts (user‑linked comments, moderation ready)
 
----
-
-## ✅ Key Features
-
-- **Blog post publishing** with titles, content, and dates  
-- **Post listing & detail views** for easy browsing  
-- **Responsive layout** optimized for mobile and desktop  
-- **Clean UI** using lightweight HTML/CSS  
-- **Template‑driven pages** for SEO‑friendly rendering  
-
----
-
-## 🧱 Tech Stack
-
-- **Backend:** Django (Python)  
-- **Frontend:** HTML, CSS  
-- **Templates:** Django Template Engine  
-
----
-
-## 📂 Project Structure (Typical)
-
+## Project Structure
 ```
-django-blog-project/
-├── blog/                 # App with models, views, urls, templates
-├── templates/            # Global templates (if used)
-├── static/               # CSS, images, JS
-├── manage.py
-└── requirements.txt
-```
-
----
-
-## 🚀 Getting Started
-
-### 1) Clone the repository
-```bash
-git clone https://github.com/worku404/django-blog-project.git
-cd django-blog-project
+Gold_blog/
+  gold_blog/
+    account/
+    blog/
+    foodie/
+    staticfiles/
+    manage.py
+    requirements.txt
 ```
 
-### 2) Create and activate a virtual environment
-```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-```
+## Local Setup
+1. `cd gold_blog`
+2. `python -m venv .venv`
+3. `.\.venv\Scripts\activate` or `source .venv/bin/activate`
+4. `pip install -r requirements.txt`
+5. Create `gold_blog/foodie/.env` or export environment variables
+6. `python manage.py migrate`
+7. `python manage.py runserver`
 
-### 3) Install dependencies
-```bash
-pip install -r requirements.txt
-```
+Open `http://127.0.0.1:8000/`.
 
-### 4) Apply migrations
-```bash
-python manage.py migrate
-```
+## Environment Variables
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| SECRET_KEY | yes | Django secret key |
+| DEBUG | no | True or False |
+| ALLOWED_HOSTS | no | Comma-separated hosts |
+| DATABASE_URL | no | Postgres connection string |
+| EMAIL_HOST_USER | for email | SMTP username |
+| EMAIL_HOST_PASSWORD | for email | SMTP password (Gmail App Password if using Gmail) |
+| DEFAULT_FROM_EMAIL | no | From header for outgoing mail |
+| GEMINI_API_KEY_1 | for AI | Gemini API key |
+| GEMINI_API_KEY_2 | optional | Additional Gemini API key |
+| GEMINI_API_KEY_3 | optional | Additional Gemini API key |
+| GEMINI_API_KEY_4 | optional | Additional Gemini API key |
+| GOOGLE_OAUTH2_KEY | optional | Google OAuth client ID |
+| GOOGLE_OAUTH2_SECRET | optional | Google OAuth client secret |
+| DJANGO_SUPERUSER_USERNAME | optional | For non-interactive superuser creation |
+| DJANGO_SUPERUSER_EMAIL | optional | For non-interactive superuser creation |
+| DJANGO_SUPERUSER_PASSWORD | optional | For non-interactive superuser creation |
 
-### 5) Run the development server
-```bash
-python manage.py runserver
-```
+## Admin User
+- Interactive: `python manage.py createsuperuser`
+- Non-interactive: set `DJANGO_SUPERUSER_*` and run `python manage.py create_superuser`
 
-Open your browser at:  
-**http://127.0.0.1:8000/**
+## Notes
+- The AI chat uses session history and stores recent turns in the user session.
+- Search uses `TrigramSimilarity` and requires PostgreSQL with the `pg_trgm` extension.
+- Comments are supported; the UI can be toggled in `gold_blog/blog/templates/blog/post/detail.html` if needed.
 
----
+## License
+MIT License. See `LICENSE`.
 
-## 🧪 Optional: Create a Superuser (Admin Access)
-
-```bash
-python manage.py createsuperuser
-```
-
-Then visit:  
-**http://127.0.0.1:8000/admin**
-
----
-
-## 📝 Customization
-
-You can easily extend the project by:
-- Adding categories/tags
-- Implementing search or filters
-- Enhancing the UI with a CSS framework
-- Adding comments or user authentication
-
----
-
-## 📌 Best Use Cases
-
-- Personal blogging  
-- Learning Django basics  
-- Portfolio content  
-- Simple project updates  
-
----
-
-## 📄 License
-
-If you plan to open‑source this project, add a license file.  
-Example: [MIT License](https://opensource.org/licenses/MIT)
-
----
-
-## 🙌 Contributing
-
-Contributions are welcome!  
-Feel free to fork the repo and submit a pull request.
-
----
-
-## 📫 Contact
-
-If you have questions or suggestions, open an issue or reach out through GitHub.
-
----
-
-**Built with Django — simple, clean, and content‑first.**
+## Contributing
+Contributions are welcome. Open an issue or submit a pull request.

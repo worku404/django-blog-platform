@@ -178,6 +178,7 @@ def post_share(request, post_id):
     )
   #  ensure only POST requests are allowed
 @require_POST
+@login_required
 def post_comment(request, post_id):
     llm_form = LLMForm()
     post = get_object_or_404(  #  fetch the post or return 404 if not found
