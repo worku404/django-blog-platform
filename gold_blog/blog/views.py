@@ -1,37 +1,24 @@
 from django.views.generic import ListView #this is for class based view
 from django.shortcuts import get_object_or_404, render
-from .models import Post #this fetch data from post class
-# creating post share view
+from django.contrib.postgres.search import (SearchVector, SearchQuery, SearchRank)
 from django.conf import settings  #  access DEFAULT_FROM_EMAIL / mail backend
-from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
-
 from django.contrib.postgres.search import TrigramSimilarity
-# import redis
-
-from .form import (EmailPostForm, 
-                   CommentForm, 
-                   SearchForm,
-                   LLMForm,
-                #    LoginForm
-                   ) # validate share-by-email inputs and  # needed for Post_detail
-from django.contrib.postgres.search import (SearchVector, 
-                                            SearchQuery,
-                                            SearchRank
-                                            )
-
-from django.db.models import Count
-from taggit.models import Tag
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-import requests
 from django.http import JsonResponse,HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
+from taggit.models import Tag
+import requests
+# import redis
+import markdown
 import os
 from dotenv import load_dotenv
-import markdown
-
-from django.contrib.auth.decorators import login_required
+# creating post share view
+from .models import Post #this fetch data from post class
+from .form import EmailPostForm, CommentForm, SearchForm, LLMForm # validate share-by-email inputs and  # needed for Post_detail
+from account.emailer import send_email_brevo
 
 @login_required
 def Post_detail(request, year, month, day, slug, post_id): #here we have to pass the arguments here inorder to display the revered url.
@@ -157,13 +144,15 @@ def post_share(request, post_id):
                 f"Read {post.title} at {post_url}\n\n"
                 f"{cd['name']}'s comments: {cd['comments']}"
             )
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[cd['to']],
-            )
-            sent = True
+            try:
+                send_email_brevo(
+                    to_email=cd["to"],
+                    subject=subject,
+                    text=message,
+                )
+                sent = True
+            except Exception:
+                sent = False
     else:
         form = EmailPostForm()
     return render(
@@ -178,7 +167,6 @@ def post_share(request, post_id):
     )
   #  ensure only POST requests are allowed
 @require_POST
-@login_required
 def post_comment(request, post_id):
     llm_form = LLMForm()
     post = get_object_or_404(  #  fetch the post or return 404 if not found
@@ -240,8 +228,49 @@ def post_search(request):
         }
     )
 
+# Correct path: up one, then into foodie
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'foodie', '.env')
 load_dotenv(dotenv_path=env_path)
+# def llm_generate(request):
+#     if request.method == "POST":
+#         prompt = request.POST.get("prompt") #text input
+#         # List of API keys (fallback order)
+#         api_keys = [
+#             os.getenv("GEMINI_API_KEY_1"),
+#             os.getenv("GEMINI_API_KEY_2"),
+#             os.getenv("GEMINI_API_KEY_3"),
+#             os.getenv("GEMINI_API_KEY_4"),
+#         ]
+#         url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent"
+#         data = {
+#             "contents": [
+#                 {
+#                     "parts": [
+#                         {"text": prompt}
+#                     ]
+#                 }
+#             ]
+#         }
+#         for api_key in api_keys:
+#             if not api_key:
+#                 continue  # Skip if key is missing
+#             headers = {
+#                 "Content-Type": "application/json",
+#                 "x-goog-api-key": api_key
+#             }
+#             try:
+#                 response = requests.post(url, headers=headers, json=data, timeout=15)
+#                 if response.status_code == 200:
+#                     content = response.json()
+#                     generated = content["candidates"][0]["content"]["parts"][0]["text"]
+#                     #convert to Markdown to HTML
+#                     generated_html = markdown.markdown(generated)
+#                     return JsonResponse({"generated": generated_html})
+#             except Exception as e:
+#                 continue  # Try next key if error occurs
+#         return JsonResponse({"error": "All API keys failed or quota exceeded."}, status=500)
+
+#     return JsonResponse({"error": "Invalid request."}, status=400)
 @require_POST
 @login_required
 def post_like(request):

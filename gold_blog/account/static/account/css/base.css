@@ -32,6 +32,7 @@ body{
     right: -30px;
     bottom: -80px;
 }
+
 form{
     height: 520px;
     width: 400px;
@@ -442,4 +443,21 @@ input:focus{
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
+}
+/* Verify email extras */
+.code-input {
+  letter-spacing: 6px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.secondary-btn {
+  margin-top: 12px;
+  background-color: rgba(255,255,255,0.18);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.secondary-btn:hover {
+  background-color: rgba(255,255,255,0.28);
 }

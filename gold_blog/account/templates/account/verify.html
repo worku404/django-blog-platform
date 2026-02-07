@@ -1,0 +1,37 @@
+{% extends "account/base.html" %}
+
+{% block title %}Verify Email{% endblock %}
+
+{% block content %}
+<div class="background">
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+
+<form method="post" action="{% url 'verify_email' %}">
+  {% csrf_token %}
+  <h3>Verify your email</h3>
+
+  <p class="helptext">
+    We sent a 6‑digit code to your email inbox.
+    Please check your inbox (and spam folder) and enter it below.
+  </p>
+
+  <label for="id_code">Verification code</label>
+  <input id="id_code" class="code-input" type="text" name="code" maxlength="6" required />
+
+  {% if error %}
+    <div class="form-errors">
+      <p>{{ error }}</p>
+    </div>
+  {% endif %}
+  {% if info %}
+    <p class="helptext">{{ info }}</p>
+  {% endif %}
+
+  <button type="submit">Verify</button>
+  <button type="submit" class="secondary-btn" formaction="{% url 'resend_otp' %}">
+    Resend code
+  </button>
+</form>
+{% endblock %}

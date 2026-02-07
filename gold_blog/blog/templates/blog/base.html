@@ -99,10 +99,10 @@
              
 
               <div class="sidebar__card">
-                <div class="sidebar__brand">
+                <div class="sidebar__brand" style="margin-top: 0;">
                   <div class="sidebar__mark" aria-hidden="true"></div>
                   <div>
-                    <h2 class="sidebar__title">My blog</h2>
+                    <h3 class="postcount">Hello, {% if user.first_name %}{{ user.first_name|capfirst }}{% else %}{{ user.username|capfirst }}{% endif %}.</h3>
                     <p class="sidebar__subtitle">
                       Writing, notes, and updates.
                     </p>
