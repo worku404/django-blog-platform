@@ -26,10 +26,12 @@ class PostAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['user_name', 'user_email', 'post', 'created', 'active']
     list_filter = ['active', 'created', 'updated']
-    search_fields = ['user__name', 'user__email', 'body']
+    search_fields = ['user__username', 'user__email', 'body']
     def user_email(self, obj):
-        return obj.user.email
+        return obj.user.email if obj.user else ""
     def user_name(self, obj):
+        if not obj.user:
+            return "Anonymous"
         full_name = obj.user.get_full_name()
-        return  full_name if full_name else obj.user.username
+        return full_name if full_name else obj.user.username
     user_email.short_description = 'User Email'

@@ -85,6 +85,11 @@ class Comment(models.Model):
             models.Index(fields=['created']),  # Optimize queries by creation time
         ]
     def __str__(self):
-        return f'Commented by {self.user.username} on {self.post}'  # Human-readable label
+        if self.user:
+            username = self.user.get_username()
+        else:
+            username = "Anonymous"
+        return f"Commented by {username} on {self.post}"
+
     #makemigration
 #next go to admin.py and register the model

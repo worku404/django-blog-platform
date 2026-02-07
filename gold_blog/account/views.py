@@ -30,14 +30,29 @@ def register(request):
                 user=new_user,
                 defaults={
                     'code_hash': make_password(code),
-                    'expires_at': otp_expire,
+                    'expires_at': otp_expire(10),
                     'attempts': 0,
+                    'last_sent_at': timezone.now(),
                 }
             )
-            
-            send_email_brevo(new_user.email, "Your verification code", f"Your code is: {code}")
+
+            try:
+                send_email_brevo(
+                    new_user.email,
+                    "Your verification code",
+                    f"Your code is: {code}",
+                )
+            except Exception:
+                messages.error(
+                    request,
+                    "We couldn't send the verification email. Please try again later."
+                )
+                return render(request, 'account/register.html', {'user_form': user_form})
+
             request.session['pending_user_id'] = new_user.id
             return redirect('verify_email')
+            
+
                         
             # create the user profile
             # Profile.objects.create(user=new_user)
