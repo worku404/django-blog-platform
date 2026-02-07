@@ -27,10 +27,16 @@
       const entry = document.createElement("div");
       entry.className = "llm-chat-entry";
       entry.innerHTML = `
-        <div class="llm-chat-user">You</div>
-        <div class="llm-chat-user-msg">${escapeHtml(item.prompt)}</div>
-        <div class="llm-chat-ai">AI</div>
-        <div class="llm-chat-ai-msg">${item.response}</div>
+        <div class="llm-chat-row llm-chat-row--user">
+          <div class="llm-chat-bubble llm-chat-bubble--user">
+            <div class="llm-chat-msg">${escapeHtml(item.prompt)}</div>
+          </div>
+        </div>
+        <div class="llm-chat-row llm-chat-row--ai">
+          <div class="llm-chat-bubble llm-chat-bubble--ai">
+            <div class="llm-chat-msg">${item.response}</div>
+          </div>
+        </div>
       `;
       container.appendChild(entry);
     });
