@@ -49,6 +49,52 @@
   align-items: center;
 }
 
+.postlist__iconbtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.postlist__iconbtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.postlist__iconbtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.postlist__iconbtn--primary {
+  background: rgba(124, 92, 255, 0.18);
+  border-color: rgba(124, 92, 255, 0.35);
+  color: #ffffff;
+  box-shadow: 0 8px 22px rgba(124, 92, 255, 0.25);
+}
+
+.postlist__iconbtn--primary:hover {
+  background: rgba(124, 92, 255, 0.28);
+  border-color: rgba(124, 92, 255, 0.5);
+}
+
+.postlist__iconbtn--ghost {
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .postlist__stats {
   margin: 0;
   color: var(--muted);

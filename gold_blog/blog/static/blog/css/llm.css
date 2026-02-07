@@ -99,7 +99,28 @@ body {
     padding: 1.5rem 1rem 2rem !important;
   }
 
+  .llm-page {
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .llm-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
   .llm-page__title {
     font-size: 1.2rem;
+  }
+
+  .llm-back-link {
+    margin-top: 0;
+    margin-right: 0 !important;
+  }
+
+  .llm-page .llm-chat-history,
+  .llm-page .llm-form {
+    width: 100%;
   }
 }

@@ -20,6 +20,16 @@
       return map[char] || char;
     });
 
+  const waitingMarkup = () =>
+    `
+      <span class="llm-wait" role="status" aria-live="polite">
+        <span class="llm-wait__letter">W</span>
+        <span class="llm-wait__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </span>
+    `.trim();
+
   function renderHistory() {
     const container = document.getElementById("history-container");
     container.innerHTML = "";
@@ -68,7 +78,7 @@
       const prompt = promptInput.value.trim();
       if (!prompt) return;
       sendBtn.disabled = true;
-      let aiResponse = "Generating...";
+      let aiResponse = waitingMarkup();
       history.push({ prompt: prompt, response: aiResponse });
       renderHistory();
 

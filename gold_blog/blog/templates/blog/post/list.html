@@ -35,8 +35,18 @@
             </p>
           {% endif %}
           <div class="postlist__actions">
-            <a class="btn btn--soft" href="{% url 'blog:post_list' %}">All posts</a>
-            <a class="btn btn--ghost" href="{% url 'blog:home' %}">Home</a>
+            <a class="postlist__iconbtn postlist__iconbtn--primary" href="{% url 'blog:post_list' %}" aria-label="All posts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 6h13M8 12h13M8 18h13"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h.01M3 12h.01M3 18h.01"></path>
+              </svg>
+            </a>
+            <a class="postlist__iconbtn postlist__iconbtn--ghost" href="{% url 'blog:home' %}" aria-label="Home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10v10h5v-6h4v6h5V10"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </div>

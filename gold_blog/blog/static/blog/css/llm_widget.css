@@ -15,7 +15,29 @@
   background: transparent;
   border-top: 1px dashed rgba(255, 255, 255, 0.12);
   min-height: 0;
+  flex: 1;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 92, 255, 0.45) rgba(255, 255, 255, 0.06);
+}
+
+.llm-chat-history::-webkit-scrollbar {
+  width: 10px;
+}
+
+.llm-chat-history::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.llm-chat-history::-webkit-scrollbar-thumb {
+  background: rgba(124, 92, 255, 0.5);
+  border-radius: 999px;
+  border: 2px solid rgba(9, 12, 20, 0.8);
+}
+
+.llm-chat-history::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 92, 255, 0.7);
 }
 
 .llm-chat-entry {
@@ -84,6 +106,66 @@
 
 .llm-chat-msg p:first-child {
   margin-top: 0;
+}
+
+.llm-wait {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.llm-wait__letter {
+  color: rgba(124, 92, 255, 0.95);
+  animation: llm-wait-pulse 1.1s ease-in-out infinite;
+}
+
+.llm-wait__dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 0.2rem;
+}
+
+.llm-wait__dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(124, 92, 255, 0.7);
+  animation: llm-wait-dot 1.2s ease-in-out infinite;
+}
+
+.llm-wait__dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.llm-wait__dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes llm-wait-pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+}
+
+@keyframes llm-wait-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
 }
 
 .llm-form {
@@ -186,8 +268,19 @@
 
 @media (max-width: 680px) {
   .llm-chat-history {
-    max-height: 200px;
+    max-height: none;
+    min-height: 30vh;
     padding: 0.6rem 0.75rem;
+  }
+
+  .llm-chat-row--user,
+  .llm-chat-row--ai {
+    justify-content: stretch;
+  }
+
+  .llm-chat-bubble {
+    width: 100%;
+    max-width: 100%;
   }
 
   .llm-btn {

@@ -1,30 +1,25 @@
 {# filepath: c:\Users\hi\Downloads\webdev\DjangoWithPaulo\FOODIE\blog\templates\blog\post\includes\comment_form.html #}
 <section class="panel panel--card commentform">
   <div class="panel__head">
-    <h2 class="panel__title">Add a new comment</h2>
+    <h2 class="panel__title formwrap__title">Leave a comment</h2>
     <p class="panel__sub">Join the discussion. Be respectful.</p>
   </div>
 
   <form class="cform" action="{% url 'blog:post_comment' post.id %}" method="post" novalidate>
     {% csrf_token %}
 
-    <div class="cform__grid">
-      <div class="cform__field">
-        {{ form.name.as_field_group }}
-      </div>
-
-      <div class="cform__field">
-        {{ form.email.as_field_group }}
-      </div>
-    </div>
-
     <div class="cform__field cform__field--full">
-      {{ form.body.as_field_group }}
+      {{ form.body.errors }}
+      {{ form.body }}
     </div>
 
     <div class="cform__actions">
-        <button class="btn-pill btn-teal" type="submit">Add comment</button>
-      <a class="btn btn--soft" href="{{ post.get_absolute_url }}">Cancel</a>
+      <button class="btn btn--soft comment__submit" type="submit" aria-label="Add comment">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
+        </svg>
+      </button>
+      <a class="btn btn--ghost" href="{{ post.get_absolute_url }}">Cancel</a>
     </div>
   </form>
 </section>

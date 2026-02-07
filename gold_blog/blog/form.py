@@ -23,6 +23,13 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
+        labels = {'body': ''}
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'placeholder': 'Write your comment...',
+                'rows': 4,
+            })
+        }
         
 class SearchForm(forms.Form):
     query = forms.CharField()

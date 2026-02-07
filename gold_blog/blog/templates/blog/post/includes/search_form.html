@@ -1,13 +1,20 @@
 <form action="{% url 'blog:post_search' %}" method="get" class="sidebar-search" data-search-form>
-  <input
-    type="text"
-    name="query"
-    placeholder="Search posts..."
-    value="{{ request.GET.query|default:'' }}"
-    aria-label="Search posts"
-    data-search-input
-  />
-  <button type="submit" class="btn-pill btn-dark btn-sm search--btn">Search</button>
+  <div class="sidebar-search__row">
+    <input
+      type="text"
+      name="query"
+      placeholder="Search posts..."
+      value="{{ request.GET.query|default:'' }}"
+      aria-label="Search posts"
+      data-search-input
+    />
+    <button type="submit" class="btn btn--soft sidebar-search__btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20 20l-3.5-3.5"></path>
+      </svg>
+    </button>
+  </div>
   <p class="form-error" data-search-error style="margin: 6px 0 0; color: #ff4d4d; display: none;">
     This field is required.
   </p>
